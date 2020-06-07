@@ -19,6 +19,16 @@
 #
 -->
 
+# Updates for PineTime Companion App
+
+```bash
+sudo apt install graphviz
+cd ~/go/src/mynewt.apache.org/newtmgr/newtmgr
+sudo ./newtmgr conn add pinetime type=ble connstring="peer_name=pinetime"
+sudo ./newtmgr image list -c pinetime 2> trace.out
+go tool trace trace.out
+```
+
 # Newtmgr
 
 Newt Manager (newtmgr) is the application tool that enables a user to communicate with and manage
