@@ -33,10 +33,10 @@ mixin NmpRsp {
 
 class NmpBase {
 	NmpHdr hdr;  //  `codec:"-"`
-}
-
-func (b *NmpBase) Hdr() *NmpHdr {
-	return &b.hdr
+  
+  NmpHdr Hdr() {
+	  return hdr;
+  }
 }
 
 func (b *NmpBase) SetHdr(h *NmpHdr) {
