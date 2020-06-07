@@ -1,3 +1,5 @@
+//  Converting from Go to Dart: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/nmp/nmp.go
+
 const NMP_HDR_SIZE = 8
 
 type NmpHdr struct {
