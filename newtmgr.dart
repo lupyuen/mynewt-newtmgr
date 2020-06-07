@@ -17,22 +17,22 @@ class NmpMsg {
 }
 
 // Combine req + rsp.
-type NmpReq interface {
-	Hdr() *NmpHdr
-	SetHdr(hdr *NmpHdr)
+mixin NmpReq {
+	NmpHdr Hdr();
+	void SetHdr(hdr *NmpHdr);
 
-	Msg() *NmpMsg
+	NmpMsg Msg();
 }
 
-type NmpRsp interface {
-	Hdr() *NmpHdr
-	SetHdr(msg *NmpHdr)
+mixin NmpRsp {
+	NmpHdr Hdr();
+	void SetHdr(msg *NmpHdr);
 
-	Msg() *NmpMsg
+	NmpMsg Msg();
 }
 
-type NmpBase struct {
-	hdr NmpHdr `codec:"-"`
+class NmpBase {
+	NmpHdr hdr;  //  `codec:"-"`
 }
 
 func (b *NmpBase) Hdr() *NmpHdr {
