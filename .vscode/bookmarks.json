@@ -1,0 +1,57 @@
+[
+	{
+		"path": "$ROOTPATH$/newtmgr/cli/image.go",
+		"bookmarks": [
+			{
+				"line": 90,
+				"column": 10,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/newtmgr/cli/common.go",
+		"bookmarks": [
+			{
+				"line": 260,
+				"column": 12,
+				"label": ""
+			},
+			{
+				"line": 299,
+				"column": 8,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/nmxact/xact/image.go",
+		"bookmarks": [
+			{
+				"line": 371,
+				"column": 37,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/nmxact/nmp/image.go",
+		"bookmarks": [
+			{
+				"line": 118,
+				"column": 37,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/nmxact/nmp/nmp.go",
+		"bookmarks": [
+			{
+				"line": 152,
+				"column": 13,
+				"label": ""
+			}
+		]
+	}
+]
