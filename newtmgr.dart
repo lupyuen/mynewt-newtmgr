@@ -89,25 +89,6 @@ NmpHdr DecodeNmpHdr(List<int> data /* []byte */) {
 
 	hdr.Op    = data[0];  //  uint8
 	hdr.Flags = data[1];  //  uint8
-	hdr.Len   = data[2:4];  //  binary.BigEndian.Uint16
-	hdr.Group = data[4:6];  //  binary.BigEndian.Uint16
-	hdr.Seq   = data[6];  //  uint8
-	hdr.Id    = data[7];  //  uint8
-
-	return hdr;
-}
-
-NmpHdr DecodeNmpHdr(List<int> data /* []byte */) {
-	if (data.length < NMP_HDR_SIZE) {
-    throw Exception(
-      "Newtmgr request buffer too small ${data.length} bytes"
-    );
-	}
-
-	var hdr = NmpHdr();
-
-	hdr.Op    = data[0];  //  uint8
-	hdr.Flags = data[1];  //  uint8
 	hdr.Len   = binaryBigEndianUint16(data[2], data[3]);  //  binary.BigEndian.Uint16
 	hdr.Group = binaryBigEndianUint16(data[4], data[5]);  //  binary.BigEndian.Uint16
 	hdr.Seq   = data[6];  //  uint8
