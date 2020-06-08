@@ -1,5 +1,8 @@
 //  Converting from Go to Dart: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/nmp/nmp.go
 
+//  import 'package:cbor/cbor.dart';
+//  cbor: ^3.2.0
+
 const NMP_HDR_SIZE = 8;
 
 /// SMP Header
@@ -98,6 +101,8 @@ NmpHdr DecodeNmpHdr(List<int> data /* []byte */) {
 	return hdr;
 }
 
+/*
+/// Encode body with CBOR and return the byte array
 List<int> BodyBytes(dynamic body /* interface{} */) /* []byte */ {
 	var data = make([]byte, 0);
 
@@ -111,6 +116,57 @@ List<int> BodyBytes(dynamic body /* interface{} */) /* []byte */ {
 	print("Encoded ${body} to:\n${ hexDump(data) }");
 
 	return data;
+}
+*/
+
+/// Encode the SMP Message with CBOR and return the byte array
+List<int> EncodeNmpPlain(NmpMsg nmr) /* []byte */ {
+	final bb = BodyBytes(nmr.Body);
+
+	nmr.Hdr.Len = bb.length;  //  uint16
+
+	final hb = nmr.Hdr.Bytes();
+	final data = [...hb, ...bb];
+
+	print("Encoded:\n${ hexDump(data) }");
+
+	return data;
+}
+
+/// Init the SMP Request and set the sequence number
+void fillNmpReqWithSeq(
+  NmpReq req,
+  int op,     //  uint8
+  int group,  //  uint16
+  int id,     //  uint8
+  int seq     //  uint8
+) {
+	final hdr = NmpHdr(
+		op,     //  Op
+		0,      //  Flags
+		0,      //  Len
+		group,  //  Group
+		seq,    //  Seq
+		id      //  Id
+	);
+
+	req.SetHdr(hdr);
+}
+
+/// Init the SMP Request and set the next sequence number
+void fillNmpReq(
+  NmpReq req, 
+  int op,     //  uint8
+  int group,  //  uint16
+  int id      //  uint8
+) {
+	fillNmpReqWithSeq(
+    req, 
+    op, 
+    group, 
+    id, 
+    nmxutil.NextNmpSeq()
+  );
 }
 
 /// Return byte array [a,b] as unsigned 16-bit int
@@ -126,39 +182,6 @@ List<int> binaryBigEndianPutUint16(int u) {
   ];
 }
 
-func EncodeNmpPlain(nmr *NmpMsg) ([]byte, error) {
-	bb, err := BodyBytes(nmr.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	nmr.Hdr.Len = uint16(len(bb))
-
-	hb := nmr.Hdr.Bytes()
-	data := append(hb, bb...)
-
-	log.Debugf("Encoded:\n%s", hex.Dump(data))
-
-	return data, nil
-}
-
-func fillNmpReqWithSeq(req NmpReq, op uint8, group uint16, id uint8, seq uint8) {
-	hdr := NmpHdr{
-		Op:    op,
-		Flags: 0,
-		Len:   0,
-		Group: group,
-		Seq:   seq,
-		Id:    id,
-	}
-
-	req.SetHdr(&hdr)
-}
-
-func fillNmpReq(req NmpReq, op uint8, group uint16, id uint8) {
-	fillNmpReqWithSeq(req, op, group, id, nmxutil.NextNmpSeq())
-}
-
 /*
 void main() {
   print("Hello")
@@ -166,3 +189,59 @@ void main() {
 */
 
 ////////////////////////////////////////
+
+import 'package:cbor/cbor.dart' as cbor;
+
+/// An example of using the Map Builder class.
+/// Map builder is used to build maps with complex values such as tag values, indefinite sequences
+/// and the output of other list or map builders.
+int main() {
+  // Get our cbor instance, always do this,it correctly
+  // initialises the decoder.
+  final inst = cbor.Cbor();
+
+  // Get our encoder
+  final encoder = inst.encoder;
+
+  // Encode some values
+  encoder.writeArray(<int>[1, 2, 3]);
+  encoder.writeFloat(67.89);
+  encoder.writeInt(10);
+
+  // Get our map builder
+  final mapBuilder = cbor.MapBuilder.builder();
+
+  // Add some map entries to the list.
+  // Entries are added as a key followed by a value, this ordering is enforced.
+  // Map keys can be integers or strings only, this is also enforced.
+  mapBuilder.writeString('a'); // key
+  mapBuilder.writeURI('a/ur1');
+  mapBuilder.writeString('b'); // key
+  mapBuilder.writeEpoch(1234567899);
+  mapBuilder.writeString('c'); // key
+  mapBuilder.writeDateTime('19/04/2020');
+
+  // Get our built map output and add it to the encoding stream.
+  // The key/value pairs must be balanced, i.e. you must end the map building with
+  // a value else the getData method will throw an exception.
+  // Use the addBuilderOutput method to add built output to the encoder.
+  // You can use the addBuilderOutput method on the map builder to add
+  // the output of other list or map builders to its encoding stream.
+  final mapBuilderOutput = mapBuilder.getData();
+  encoder.addBuilderOutput(mapBuilderOutput);
+
+  // Add another value
+  encoder.writeRegEx('^[12]g');
+
+  // Decode ourselves and pretty print it.
+  inst.decodeFromInput();
+  print(inst.decodedPrettyPrint(false));
+
+  // Finally to JSON
+  print(inst.decodedToJSON());
+
+  // JSON output is :-
+  // [1,2,3],67.89,10,{"a":"a/ur1","b":1234567899,"c":"19/04/2020"},"^[12]g"
+
+  return 0;
+}
