@@ -52,14 +52,15 @@ class NmpMsg {
   NmpMsg(this.Hdr, this.Body);
 }
 
-// Combine req + rsp.
-mixin NmpReq {
+/// SMP Request Message
+class NmpReq {
 	NmpHdr Hdr();
 	void SetHdr(NmpHdr hdr);
 
 	NmpMsg Msg();
 }
 
+/// SMP Response Message
 mixin NmpRsp {
 	NmpHdr Hdr();
 	void SetHdr(NmpHdr msg);
@@ -67,6 +68,7 @@ mixin NmpRsp {
 	NmpMsg Msg();
 }
 
+/// SMP Base Message
 class NmpBase {
 	NmpHdr hdr;  //  `codec:"-"`
   
@@ -194,6 +196,22 @@ List<int> binaryBigEndianPutUint16(int u) {
     u & 0xff
   ];
 }
+
+////////////////////////////////////////
+
+//  Converting from Go to Dart: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/nmp/nmp.go
+
+type ImageStateReadReq struct {
+	NmpBase `codec:"-"`
+}
+
+func NewImageStateReadReq() *ImageStateReadReq {
+	r := &ImageStateReadReq{}
+	fillNmpReq(r, NMP_OP_READ, NMP_GROUP_IMAGE, NMP_ID_IMAGE_STATE)
+	return r
+}
+
+func (r *ImageStateReadReq) Msg() *NmpMsg { return MsgFromReq(r) }
 
 /*
 void main() {
