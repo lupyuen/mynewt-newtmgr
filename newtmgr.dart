@@ -1,5 +1,8 @@
-//  Converting from Go to Dart: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/nmp/nmp.go
 import 'package:cbor/cbor.dart' as cbor;  //  From https://pub.dev/packages/cbor
+
+////////////////////////////////////////
+//  nmxact/nmp/nmp.go
+//  Converted from Go: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/nmp/nmp.go
 
 const NMP_HDR_SIZE = 8;
 
@@ -198,8 +201,8 @@ List<int> binaryBigEndianPutUint16(int u) {
 }
 
 ////////////////////////////////////////
-
-//  Converting from Go to Dart: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/nmp/nmp.go
+//  nmxact/nmp/nmp.go
+//  Converted from Go: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/nmp/nmp.go
 
 class ImageStateReadReq 
   with NmpBase       //  Get and set SMP Message Header
