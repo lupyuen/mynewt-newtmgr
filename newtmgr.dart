@@ -62,6 +62,7 @@ abstract class NmpReq {
 	void SetHdr(NmpHdr hdr);
 
 	NmpMsg Msg();
+  void Encode(cbor.Encoder encoder);
 }
 
 /// SMP Response Message
@@ -118,25 +119,36 @@ NmpHdr DecodeNmpHdr(List<int> data /* []byte */) {
 	return hdr;
 }
 
-/*
-/// Encode body with CBOR and return the byte array
-List<int> BodyBytes(dynamic body /* interface{} */) /* []byte */ {
-	var data = make([]byte, 0);
+/// Encode SMP Request Body with CBOR and return the byte array
+List<int> BodyBytes(
+  NmpReq body  //  Previously interface{}
+) {  //  Returns []byte
+  // Get our cbor instance, always do this,it correctly
+  // initialises the decoder.
+  final inst = cbor.Cbor();
 
-	var enc = codec.NewEncoderBytes(data, codec.CborHandle);
-  try {
-    enc.Encode(body);    
-  } catch (err) {
-    throw Exception("Failed to encode message ${err.Error()}");   
-  }
-  
-	print("Encoded ${body} to:\n${ hexDump(data) }");
+  // Get our encoder
+  final encoder = inst.encoder;
 
+  //  Encode the body
+  body.Encode(encoder);
+
+  //  Get the encoded body
+  final data = inst.output.getData();
+
+  // Decode ourselves and pretty print it.
+  inst.decodeFromInput();
+  print(inst.decodedPrettyPrint(false));
+
+  // Finally to JSON
+  print(inst.decodedToJSON());
+
+	print("Encoded ${ inst.decodedToJSON() } to:\n${ hexDump(data) }");
 	return data;
 }
 
 /// Encode the SMP Message with CBOR and return the byte array
-List<int> EncodeNmpPlain(NmpMsg nmr) /* []byte */ {
+List<int> EncodeNmpPlain(NmpMsg nmr) {  //  Returns []byte
 	final bb = BodyBytes(nmr.Body);
 
 	nmr.Hdr.Len = bb.length;  //  uint16
@@ -148,7 +160,6 @@ List<int> EncodeNmpPlain(NmpMsg nmr) /* []byte */ {
 
 	return data;
 }
-*/
 
 /// Init the SMP Request and set the sequence number
 void fillNmpReqWithSeq(
@@ -252,6 +263,14 @@ class ImageStateReadReq
 	NmpBase base;  //  Will not be encoded: `codec:"-"`
 
   NmpMsg Msg() { return MsgFromReq(this); }
+
+  void Encode(cbor.Encoder encoder) {
+    //  TODO
+    // Encode some values
+    encoder.writeArray(<int>[1, 2, 3]);
+    encoder.writeFloat(67.89);
+    encoder.writeInt(10);
+  }
 }
 
 /* TODO
