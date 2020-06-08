@@ -77,22 +77,28 @@ NmpHdr DecodeNmpHdr(List<int> data /* []byte */) {
 	return hdr;
 }
 
-func DecodeNmpHdr(data []byte) (*NmpHdr, error) {
-	if len(data) < NMP_HDR_SIZE {
-		return nil, fmt.Errorf(
-			"Newtmgr request buffer too small %d bytes", len(data))
+NmpHdr DecodeNmpHdr(List<int> data /* []byte */) {
+	if (data.length < NMP_HDR_SIZE) {
+    throw Exception(
+      "Newtmgr request buffer too small ${data.length} bytes"
+    );
 	}
 
-	hdr := &NmpHdr{}
+	var hdr = NmpHdr();
 
-	hdr.Op = uint8(data[0])
-	hdr.Flags = uint8(data[1])
-	hdr.Len = binary.BigEndian.Uint16(data[2:4])
-	hdr.Group = binary.BigEndian.Uint16(data[4:6])
-	hdr.Seq = uint8(data[6])
-	hdr.Id = uint8(data[7])
+	hdr.Op    = data[0];  //  uint8
+	hdr.Flags = data[1];  //  uint8
+	hdr.Len   = binaryBigEndianUint16(data[2], data[3]);  //  binary.BigEndian.Uint16
+	hdr.Group = binaryBigEndianUint16(data[4], data[5]);  //  binary.BigEndian.Uint16
+	hdr.Seq   = data[6];  //  uint8
+	hdr.Id    = data[7];  //  uint8
 
-	return hdr, nil
+	return hdr;
+}
+
+/// Return byte array [a,b] as unsigned 16-bit int
+int binaryBigEndianUint16(int a, int b) {
+  return (a << 8) + b;
 }
 
 func (hdr *NmpHdr) Bytes() []byte {
