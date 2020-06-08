@@ -43,9 +43,12 @@ class NmpHdr {
   }  
 }
 
+/// SMP Message
 class NmpMsg {
 	NmpHdr Hdr;
-	dynamic Body;  //  interface{}
+	NmpReq Body;  //  Previously interface{}
+
+  /// Construct an SMP Message
   NmpMsg(this.Hdr, this.Body);
 }
 
