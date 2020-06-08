@@ -2,6 +2,7 @@
 
 const NMP_HDR_SIZE = 8;
 
+/// SMP Header
 class NmpHdr {
 	int Op;    //  uint8: 3 bits of opcode
 	int Flags; //  uint8
@@ -9,22 +10,22 @@ class NmpHdr {
 	int Group; //  uint16
 	int Seq;   //  uint8
 	int Id;    //  uint8
-
+  
   /// Return this SMP Header as a list of bytes
   List<int> Bytes() /* []byte */ {
-	  var buf = [];  //  make([]byte, 0, NMP_HDR_SIZE);
+	  List<int> buf = [];  //  make([]byte, 0, NMP_HDR_SIZE);
+    
+    buf.add(this.Op);
+	  buf.add(this.Flags);
 
-	  buf = append(buf, byte(this.Op));
-	  buf = append(buf, byte(this.Flags));
-
-	  var u16b = binaryBigEndianPutUint16(this.Len);
-	  buf = append(buf, u16b...);
+	  List<int> u16b = binaryBigEndianPutUint16(this.Len);
+	  buf.addAll(u16b);
 
 	  u16b = binaryBigEndianPutUint16(this.Group);
-	  buf = append(buf, u16b...);
+	  buf.addAll(u16b);
 
-	  buf = append(buf, byte(this.Seq));
-	  buf = append(buf, byte(this.Id));
+	  buf.add(this.Seq);
+	  buf.add(this.Id);
 
 	  return buf;
   }  
@@ -115,23 +116,32 @@ NmpHdr DecodeNmpHdr(List<int> data /* []byte */) {
 	return hdr;
 }
 
+List<int> BodyBytes(dynamic body /* interface{} */) /* []byte */ {
+	var data = make([]byte, 0);
+
+	var enc = codec.NewEncoderBytes(data, codec.CborHandle);
+  try {
+    enc.Encode(body);    
+  } catch (err) {
+    throw Exception("Failed to encode message ${err.Error()}");   
+  }
+  
+	print("Encoded ${body} to:\n${ hexDump(data) }");
+
+	return data;
+}
+
 /// Return byte array [a,b] as unsigned 16-bit int
 int binaryBigEndianUint16(int a, int b) {
   return (a << 8) + b;
 }
 
-
-func BodyBytes(body interface{}) ([]byte, error) {
-	data := make([]byte, 0)
-
-	enc := codec.NewEncoderBytes(&data, new(codec.CborHandle))
-	if err := enc.Encode(body); err != nil {
-		return nil, fmt.Errorf("Failed to encode message %s", err.Error())
-	}
-
-	log.Debugf("Encoded %+v to:\n%s", body, hex.Dump(data))
-
-	return data, nil
+/// Return unsigned int u as big endian byte array
+List<int> binaryBigEndianPutUint16(int u) {
+  return [
+    u >> 8,
+    u & 0xff
+  ];
 }
 
 func EncodeNmpPlain(nmr *NmpMsg) ([]byte, error) {
