@@ -53,7 +53,7 @@ class NmpMsg {
 }
 
 /// SMP Request Message
-class NmpReq {
+abstract class NmpReq {
 	NmpHdr Hdr();
 	void SetHdr(NmpHdr hdr);
 
@@ -61,7 +61,7 @@ class NmpReq {
 }
 
 /// SMP Response Message
-mixin NmpRsp {
+abstract class NmpRsp {
 	NmpHdr Hdr();
 	void SetHdr(NmpHdr msg);
 
@@ -70,7 +70,7 @@ mixin NmpRsp {
 
 /// SMP Base Message
 class NmpBase {
-	NmpHdr hdr;  //  `codec:"-"`
+	NmpHdr hdr;  //  Will not be encoded: `codec:"-"`
   
   NmpHdr Hdr() {
 	  return hdr;
@@ -201,17 +201,17 @@ List<int> binaryBigEndianPutUint16(int u) {
 
 //  Converting from Go to Dart: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/nmp/nmp.go
 
-type ImageStateReadReq struct {
-	NmpBase `codec:"-"`
+class ImageStateReadReq implements NmpReq {
+	NmpBase base;  //  Will not be encoded: `codec:"-"`
+
+  NmpMsg Msg() { return MsgFromReq(this); }
 }
 
-func NewImageStateReadReq() *ImageStateReadReq {
-	r := &ImageStateReadReq{}
-	fillNmpReq(r, NMP_OP_READ, NMP_GROUP_IMAGE, NMP_ID_IMAGE_STATE)
-	return r
+ImageStateReadReq NewImageStateReadReq() {
+	var r = ImageStateReadReq();
+	fillNmpReq(r, NMP_OP_READ, NMP_GROUP_IMAGE, NMP_ID_IMAGE_STATE);
+	return r;
 }
-
-func (r *ImageStateReadReq) Msg() *NmpMsg { return MsgFromReq(r) }
 
 /*
 void main() {
