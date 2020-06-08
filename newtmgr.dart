@@ -58,6 +58,24 @@ NmpMsg NewNmpMsg() {
   );
 }
 
+NmpHdr DecodeNmpHdr(List<int> data /* []byte */) {
+	if len(data) < NMP_HDR_SIZE {
+		return nil, fmt.Errorf(
+			"Newtmgr request buffer too small %d bytes", len(data))
+	}
+
+	hdr := &NmpHdr{};
+
+	hdr.Op = uint8(data[0]);
+	hdr.Flags = uint8(data[1]);
+	hdr.Len = binary.BigEndian.Uint16(data[2:4]);
+	hdr.Group = binary.BigEndian.Uint16(data[4:6]);
+	hdr.Seq = uint8(data[6]);
+	hdr.Id = uint8(data[7]);
+
+	return hdr;
+}
+
 func DecodeNmpHdr(data []byte) (*NmpHdr, error) {
 	if len(data) < NMP_HDR_SIZE {
 		return nil, fmt.Errorf(
