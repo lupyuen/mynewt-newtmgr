@@ -9,6 +9,25 @@ class NmpHdr {
 	int Group; //  uint16
 	int Seq;   //  uint8
 	int Id;    //  uint8
+
+  /// Return this SMP Header as a list of bytes
+  List<int> Bytes() /* []byte */ {
+	  var buf = [];  //  make([]byte, 0, NMP_HDR_SIZE);
+
+	  buf = append(buf, byte(this.Op));
+	  buf = append(buf, byte(this.Flags));
+
+	  var u16b = binaryBigEndianPutUint16(this.Len);
+	  buf = append(buf, u16b...);
+
+	  u16b = binaryBigEndianPutUint16(this.Group);
+	  buf = append(buf, u16b...);
+
+	  buf = append(buf, byte(this.Seq));
+	  buf = append(buf, byte(this.Id));
+
+	  return buf;
+  }  
 }
 
 class NmpMsg {
@@ -101,24 +120,6 @@ int binaryBigEndianUint16(int a, int b) {
   return (a << 8) + b;
 }
 
-func (hdr *NmpHdr) Bytes() []byte {
-	buf := make([]byte, 0, NMP_HDR_SIZE)
-
-	buf = append(buf, byte(hdr.Op))
-	buf = append(buf, byte(hdr.Flags))
-
-	u16b := make([]byte, 2)
-	binary.BigEndian.PutUint16(u16b, hdr.Len)
-	buf = append(buf, u16b...)
-
-	binary.BigEndian.PutUint16(u16b, hdr.Group)
-	buf = append(buf, u16b...)
-
-	buf = append(buf, byte(hdr.Seq))
-	buf = append(buf, byte(hdr.Id))
-
-	return buf
-}
 
 func BodyBytes(body interface{}) ([]byte, error) {
 	data := make([]byte, 0)
