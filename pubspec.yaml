@@ -1,0 +1,4 @@
+name: newtmgr
+
+dependencies:
+  cbor: ^3.2.0  #  From https://pub.dev/packages/cbor

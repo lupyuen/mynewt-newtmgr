@@ -1,8 +1,5 @@
 //  Converting from Go to Dart: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/nmp/nmp.go
-
-//  import 'package:cbor/cbor.dart';
-//  cbor: ^3.2.0
-//  https://pub.dev/packages/cbor
+import 'package:cbor/cbor.dart' as cbor;  //  From https://pub.dev/packages/cbor
 
 const NMP_HDR_SIZE = 8;
 
@@ -128,7 +125,6 @@ List<int> BodyBytes(dynamic body /* interface{} */) /* []byte */ {
 
 	return data;
 }
-*/
 
 /// Encode the SMP Message with CBOR and return the byte array
 List<int> EncodeNmpPlain(NmpMsg nmr) /* []byte */ {
@@ -143,6 +139,7 @@ List<int> EncodeNmpPlain(NmpMsg nmr) /* []byte */ {
 
 	return data;
 }
+*/
 
 /// Init the SMP Request and set the sequence number
 void fillNmpReqWithSeq(
@@ -164,6 +161,7 @@ void fillNmpReqWithSeq(
 	req.SetHdr(hdr);
 }
 
+/*
 /// Init the SMP Request and set the next sequence number
 void fillNmpReq(
   NmpReq req, 
@@ -179,6 +177,7 @@ void fillNmpReq(
     nmxutil.NextNmpSeq()
   );
 }
+*/
 
 /// Return byte array [a,b] as unsigned 16-bit int
 int binaryBigEndianUint16(int a, int b) {
@@ -195,13 +194,11 @@ List<int> binaryBigEndianPutUint16(int u) {
 
 /*
 void main() {
-  print("Hello")
+  print("Hello");
 }
 */
 
 ////////////////////////////////////////
-
-import 'package:cbor/cbor.dart' as cbor;
 
 /// An example of using the Map Builder class.
 /// Map builder is used to build maps with complex values such as tag values, indefinite sequences
