@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:cbor/cbor.dart' as cbor;  //  From https://pub.dev/packages/cbor
 
 ////////////////////////////////////////
@@ -224,19 +225,21 @@ ImageStateReadReq NewImageStateReadReq() {
 int nextNmpSeq = 0;  //  Previously uint8
 bool nmpSeqBeenRead = false;
 
-/// Return the next SMP Message Sequence Number
+/// Return the next SMP Message Sequence Number, 0 to 255. The first number is random.
 int NextNmpSeq() {  //  Returns uint8
 	//  TODO: seqMutex.Lock()
 	//  TODO: defer seqMutex.Unlock()
 
 	if (!nmpSeqBeenRead) {
-		nextNmpSeq = uint8(rand.Uint32());
+    //  First number is random
+    var rng = new Random();
+		nextNmpSeq = rng.nextInt(256);  //  Returns 0 to 255
 		nmpSeqBeenRead = true;
 	}
 
 	final val = nextNmpSeq;
-	nextNmpSeq++;
-
+	nextNmpSeq = (nextNmpSeq + 1) % 256;
+  assert(val >= 0 && val <= 255);
 	return val;
 }
 
