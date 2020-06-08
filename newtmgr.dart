@@ -169,7 +169,6 @@ void fillNmpReqWithSeq(
 	req.SetHdr(hdr);
 }
 
-/*
 /// Init the SMP Request and set the next sequence number
 void fillNmpReq(
   NmpReq req, 
@@ -182,10 +181,9 @@ void fillNmpReq(
     op, 
     group, 
     id, 
-    nmxutil.NextNmpSeq()
+    NextNmpSeq()  //  From nmxutil
   );
 }
-*/
 
 /// Return byte array [a,b] as unsigned 16-bit int
 int binaryBigEndianUint16(int a, int b) {
@@ -217,6 +215,29 @@ ImageStateReadReq NewImageStateReadReq() {
 	var r = ImageStateReadReq();
 	fillNmpReq(r, NMP_OP_READ, NMP_GROUP_IMAGE, NMP_ID_IMAGE_STATE);
 	return r;
+}
+
+////////////////////////////////////////
+//  nmxact/nmxutil/nmxutil.go
+//  Converted from Go: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/nmxutil/nmxutil.go
+
+int nextNmpSeq = 0;  //  Previously uint8
+bool nmpSeqBeenRead = false;
+
+/// Return the next SMP Message Sequence Number
+int NextNmpSeq() {  //  Returns uint8
+	//  TODO: seqMutex.Lock()
+	//  TODO: defer seqMutex.Unlock()
+
+	if (!nmpSeqBeenRead) {
+		nextNmpSeq = uint8(rand.Uint32());
+		nmpSeqBeenRead = true;
+	}
+
+	final val = nextNmpSeq;
+	nextNmpSeq++;
+
+	return val;
 }
 
 /*
