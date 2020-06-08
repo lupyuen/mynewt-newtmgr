@@ -14,8 +14,18 @@ class NmpHdr {
 	int Seq;   //  uint8
 	int Id;    //  uint8
   
+  /// Construct an SMP Header
+  NmpHdr(
+    this.Op,    //  uint8: 3 bits of opcode
+	  this.Flags, //  uint8
+	  this.Len,   //  uint16
+	  this.Group, //  uint16
+	  this.Seq,   //  uint8
+	  this.Id     //  uint8
+  );
+  
   /// Return this SMP Header as a list of bytes
-  List<int> Bytes() /* []byte */ {
+  List<int> Bytes() {  //  Returns []byte
 	  List<int> buf = [];  //  make([]byte, 0, NMP_HDR_SIZE);
     
     buf.add(this.Op);
@@ -77,7 +87,7 @@ NmpMsg MsgFromReq(NmpReq r) {
 
 NmpMsg NewNmpMsg() {
 	return NmpMsg(
-    NmpHdr(),
+    NmpHdr(0, 0, 0, 0, 0, 0),
     null
   );
 }
@@ -89,14 +99,14 @@ NmpHdr DecodeNmpHdr(List<int> data /* []byte */) {
     );
 	}
 
-	var hdr = NmpHdr();
-
-	hdr.Op    = data[0];  //  uint8
-	hdr.Flags = data[1];  //  uint8
-	hdr.Len   = binaryBigEndianUint16(data[2], data[3]);  //  binary.BigEndian.Uint16
-	hdr.Group = binaryBigEndianUint16(data[4], data[5]);  //  binary.BigEndian.Uint16
-	hdr.Seq   = data[6];  //  uint8
-	hdr.Id    = data[7];  //  uint8
+	final hdr = NmpHdr(
+    data[0],  //  Op:    uint8
+    data[1],  //  Flags: uint8
+    binaryBigEndianUint16(data[2], data[3]),  //  Len: binary.BigEndian.Uint16
+    binaryBigEndianUint16(data[4], data[5]),  //  Group: binary.BigEndian.Uint16
+    data[6],  //  Seq:   uint8
+    data[7],  //  Id:    uint8       
+  );
 
 	return hdr;
 }
