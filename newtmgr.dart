@@ -51,8 +51,11 @@ NmpMsg MsgFromReq(NmpReq r) {
 	);
 }
 
-func NewNmpMsg() *NmpMsg {
-	return &NmpMsg{}
+NmpMsg NewNmpMsg() {
+	return NmpMsg(
+    NmpHdr(),
+    null
+  );
 }
 
 func DecodeNmpHdr(data []byte) (*NmpHdr, error) {
