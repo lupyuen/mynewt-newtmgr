@@ -118,5 +118,15 @@
 				"label": ""
 			}
 		]
+	},
+	{
+		"path": "$ROOTPATH$\\nmxact\\mgmt\\mgmt.go",
+		"bookmarks": [
+			{
+				"line": 29,
+				"column": 10,
+				"label": ""
+			}
+		]
 	}
 ]
