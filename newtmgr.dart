@@ -212,6 +212,11 @@ typed.Uint8Buffer binaryBigEndianPutUint16(int u) {
   return data;
 }
 
+/// Return the buffer buf dumped as hex numbers
+String hexDump(typed.Uint8Buffer buf) {
+  return "TODO";  
+}
+
 ////////////////////////////////////////
 //  nmxact/nmp/image.go
 //  Converted from Go: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/nmp/image.go
@@ -484,6 +489,10 @@ int main() {
 
   // JSON output is :-
   // [1,2,3],67.89,10,{"a":"a/ur1","b":1234567899,"c":"19/04/2020"},"^[12]g"
+
+  //  Get the encoded body
+  final data = inst.output.getData();
+	print("Encoded ${ inst.decodedToJSON() } to:\n${ hexDump(data) }");
 
   return 0;
 }
