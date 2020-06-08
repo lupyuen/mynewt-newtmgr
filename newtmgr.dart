@@ -214,7 +214,11 @@ typed.Uint8Buffer binaryBigEndianPutUint16(int u) {
 
 /// Return the buffer buf dumped as hex numbers
 String hexDump(typed.Uint8Buffer buf) {
-  return "TODO";  
+  return buf.map(
+    (b) {
+      return b.toRadixString(16).padLeft(2, "0");
+    }
+  ).join(" ");
 }
 
 ////////////////////////////////////////
