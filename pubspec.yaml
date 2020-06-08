@@ -1,4 +1,5 @@
 name: newtmgr
 
 dependencies:
-  cbor: ^3.2.0  #  From https://pub.dev/packages/cbor
+  cbor:       ^3.2.0  #  CBOR Encoder and Decoder. From https://pub.dev/packages/cbor
+  typed_data: ^1.1.6  #  Helpers for Byte Buffers. From https://pub.dev/packages/typed_data

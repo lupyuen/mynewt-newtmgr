@@ -1,5 +1,6 @@
 import 'dart:math';
-import 'package:cbor/cbor.dart' as cbor;  //  From https://pub.dev/packages/cbor
+import 'package:cbor/cbor.dart' as cbor;               //  CBOR Encoder and Decoder. From https://pub.dev/packages/cbor
+import 'package:typed_data/typed_data.dart' as typed;  //  Helpers for Byte Buffers. From https://pub.dev/packages/typed_data
 
 ////////////////////////////////////////
 //  nmxact/nmp/nmp.go
@@ -27,13 +28,13 @@ class NmpHdr {
   );
   
   /// Return this SMP Header as a list of bytes
-  List<int> Bytes() {  //  Returns []byte
-	  List<int> buf = [];  //  make([]byte, 0, NMP_HDR_SIZE);
+  typed.Uint8Buffer Bytes() {  //  Returns []byte
+	  var buf = typed.Uint8Buffer();  //  make([]byte, 0, NMP_HDR_SIZE);
     
     buf.add(this.Op);
 	  buf.add(this.Flags);
 
-	  List<int> u16b = binaryBigEndianPutUint16(this.Len);
+	  typed.Uint8Buffer u16b = binaryBigEndianPutUint16(this.Len);
 	  buf.addAll(u16b);
 
 	  u16b = binaryBigEndianPutUint16(this.Group);
@@ -100,7 +101,7 @@ NmpMsg NewNmpMsg() {
   );
 }
 
-NmpHdr DecodeNmpHdr(List<int> data /* []byte */) {
+NmpHdr DecodeNmpHdr(typed.Uint8Buffer data /* []byte */) {
 	if (data.length < NMP_HDR_SIZE) {
     throw Exception(
       "Newtmgr request buffer too small ${data.length} bytes"
@@ -120,7 +121,7 @@ NmpHdr DecodeNmpHdr(List<int> data /* []byte */) {
 }
 
 /// Encode SMP Request Body with CBOR and return the byte array
-List<int> BodyBytes(
+typed.Uint8Buffer BodyBytes(
   NmpReq body  //  Previously interface{}
 ) {  //  Returns []byte
   // Get our cbor instance, always do this,it correctly
@@ -148,16 +149,17 @@ List<int> BodyBytes(
 }
 
 /// Encode the SMP Message with CBOR and return the byte array
-List<int> EncodeNmpPlain(NmpMsg nmr) {  //  Returns []byte
+typed.Uint8Buffer EncodeNmpPlain(NmpMsg nmr) {  //  Returns []byte
 	final bb = BodyBytes(nmr.Body);
 
 	nmr.Hdr.Len = bb.length;  //  uint16
 
 	final hb = nmr.Hdr.Bytes();
-	final data = [...hb, ...bb];
+  var data = typed.Uint8Buffer();
+  data.addAll(hb);
+  data.addAll(bb);
 
 	print("Encoded:\n${ hexDump(data) }");
-
 	return data;
 }
 
@@ -203,11 +205,11 @@ int binaryBigEndianUint16(int a, int b) {
 }
 
 /// Return unsigned int u as big endian byte array
-List<int> binaryBigEndianPutUint16(int u) {
-  return [
-    u >> 8,
-    u & 0xff
-  ];
+typed.Uint8Buffer binaryBigEndianPutUint16(int u) {
+  var data = typed.Uint8Buffer();
+  data.add(u >> 8);
+  data.add(u & 0xff);
+  return data;
 }
 
 ////////////////////////////////////////
