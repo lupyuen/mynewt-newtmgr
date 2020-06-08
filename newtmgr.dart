@@ -2,6 +2,7 @@
 
 //  import 'package:cbor/cbor.dart';
 //  cbor: ^3.2.0
+//  https://pub.dev/packages/cbor
 
 const NMP_HDR_SIZE = 8;
 
