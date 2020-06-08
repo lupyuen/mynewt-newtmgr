@@ -217,7 +217,8 @@ int main() {
   encoder.writeInt(10);
 
   // Get our map builder
-  final mapBuilder = cbor.MapBuilder.builder();
+  final mapBuilder = cbor.MapBuilder
+    .builder();
 
   // Add some map entries to the list.
   // Entries are added as a key followed by a value, this ordering is enforced.
@@ -235,8 +236,10 @@ int main() {
   // Use the addBuilderOutput method to add built output to the encoder.
   // You can use the addBuilderOutput method on the map builder to add
   // the output of other list or map builders to its encoding stream.
-  final mapBuilderOutput = mapBuilder.getData();
-  encoder.addBuilderOutput(mapBuilderOutput);
+  final mapBuilderOutput = mapBuilder
+    .getData();
+  encoder
+    .addBuilderOutput(mapBuilderOutput);
 
   // Add another value
   encoder.writeRegEx('^[12]g');
