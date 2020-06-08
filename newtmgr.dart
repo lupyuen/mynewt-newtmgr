@@ -14,6 +14,7 @@ class NmpHdr {
 class NmpMsg {
 	NmpHdr Hdr;
 	dynamic Body;  //  interface{}
+  NmpMsg(this.Hdr, this.Body);
 }
 
 // Combine req + rsp.
@@ -41,14 +42,13 @@ class NmpBase {
   void SetHdr(NmpHdr h) {
 	  hdr = h;
   }
-
 }
 
-func MsgFromReq(r NmpReq) *NmpMsg {
-	return &NmpMsg{
-		*r.Hdr(),
-		r,
-	}
+NmpMsg MsgFromReq(NmpReq r) {
+	return NmpMsg(
+		r.Hdr(),
+		r
+	);
 }
 
 func NewNmpMsg() *NmpMsg {
