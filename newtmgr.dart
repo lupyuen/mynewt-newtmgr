@@ -26,6 +26,7 @@ class NmpHdr {
 
 	  buf.add(this.Seq);
 	  buf.add(this.Id);
+    assert(buf.length == NMP_HDR_SIZE);
 
 	  return buf;
   }  
