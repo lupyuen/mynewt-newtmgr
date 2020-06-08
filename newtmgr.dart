@@ -3,7 +3,7 @@
 const NMP_HDR_SIZE = 8;
 
 class NmpHdr {
-	int Op;    //  uint8 /* 3 bits of opcode */
+	int Op;    //  uint8: 3 bits of opcode
 	int Flags; //  uint8
 	int Len;   //  uint16
 	int Group; //  uint16
@@ -13,20 +13,20 @@ class NmpHdr {
 
 class NmpMsg {
 	NmpHdr Hdr;
-	//  interface{} Body;
+	dynamic Body;  //  interface{}
 }
 
 // Combine req + rsp.
 mixin NmpReq {
 	NmpHdr Hdr();
-	void SetHdr(hdr *NmpHdr);
+	void SetHdr(NmpHdr hdr);
 
 	NmpMsg Msg();
 }
 
 mixin NmpRsp {
 	NmpHdr Hdr();
-	void SetHdr(msg *NmpHdr);
+	void SetHdr(NmpHdr msg);
 
 	NmpMsg Msg();
 }
@@ -37,10 +37,11 @@ class NmpBase {
   NmpHdr Hdr() {
 	  return hdr;
   }
-}
+  
+  void SetHdr(NmpHdr h) {
+	  hdr = h;
+  }
 
-func (b *NmpBase) SetHdr(h *NmpHdr) {
-	b.hdr = *h
 }
 
 func MsgFromReq(r NmpReq) *NmpMsg {
