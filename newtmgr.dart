@@ -69,7 +69,7 @@ abstract class NmpRsp {
 }
 
 /// SMP Base Message
-class NmpBase {
+mixin NmpBase {
 	NmpHdr hdr;  //  Will not be encoded: `codec:"-"`
   
   NmpHdr Hdr() {
@@ -201,7 +201,10 @@ List<int> binaryBigEndianPutUint16(int u) {
 
 //  Converting from Go to Dart: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/nmp/nmp.go
 
-class ImageStateReadReq implements NmpReq {
+class ImageStateReadReq 
+  with NmpBase       //  Get and set SMP Message Header
+  implements NmpReq  //  SMP Request Message  
+{
 	NmpBase base;  //  Will not be encoded: `codec:"-"`
 
   NmpMsg Msg() { return MsgFromReq(this); }
