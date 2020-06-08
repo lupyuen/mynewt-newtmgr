@@ -120,6 +120,16 @@
 		]
 	},
 	{
+		"path": "$ROOTPATH$\\nmxact\\mgmt\\transceiver.go",
+		"bookmarks": [
+			{
+				"line": 76,
+				"column": 26,
+				"label": ""
+			}
+		]
+	},
+	{
 		"path": "$ROOTPATH$\\nmxact\\mgmt\\mgmt.go",
 		"bookmarks": [
 			{
