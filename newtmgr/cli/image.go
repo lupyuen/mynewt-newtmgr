@@ -93,7 +93,7 @@ func imageStatePrintRsp(rsp *nmp.ImageStateRsp) error {
 
 func imageStateListCmd(cmd *cobra.Command, args []string) {
 	_, task := trace.NewTask(context.Background(), "newtmgr/cli/image.go/imageStateListCmd")
-	time.Sleep(1)
+	time.Sleep(100 * time.Millisecond) ////
 	defer task.End()
 
 	s, err := GetSesn()

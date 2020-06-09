@@ -31,7 +31,7 @@ import (
 func txReq(s sesn.Sesn, m *nmp.NmpMsg, c *CmdBase) (
 	nmp.NmpRsp, error) {
 	_, task := trace.NewTask(context.Background(), "nmxact/xact/xact.go/txReq")
-	time.Sleep(1)
+	time.Sleep(100 * time.Millisecond) ////
 	defer task.End()
 
 	if c.abortErr != nil {

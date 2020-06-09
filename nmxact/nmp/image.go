@@ -46,12 +46,14 @@ type ImageUploadRsp struct {
 }
 
 func NewImageUploadReq() *ImageUploadReq {
+	time.Sleep(100 * time.Millisecond)  ////
 	r := &ImageUploadReq{}
 	fillNmpReq(r, NMP_OP_WRITE, NMP_GROUP_IMAGE, NMP_ID_IMAGE_UPLOAD)
 	return r
 }
 
 func NewImageUploadReqWithSeq(seq uint8) *ImageUploadReq {
+	time.Sleep(100 * time.Millisecond)  ////
 	r := &ImageUploadReq{}
 	fillNmpReqWithSeq(r, NMP_OP_WRITE, NMP_GROUP_IMAGE, NMP_ID_IMAGE_UPLOAD, seq)
 	return r
@@ -124,7 +126,7 @@ type ImageStateRsp struct {
 
 func NewImageStateReadReq() *ImageStateReadReq {
 	_, task := trace.NewTask(context.Background(), "nmxact/nmp/image.go/NewImageStateReadReq")
-	time.Sleep(1)
+	time.Sleep(100 * time.Millisecond) ////
 	defer task.End()
 
 	r := &ImageStateReadReq{}
@@ -135,6 +137,7 @@ func NewImageStateReadReq() *ImageStateReadReq {
 func (r *ImageStateReadReq) Msg() *NmpMsg { return MsgFromReq(r) }
 
 func NewImageStateWriteReq() *ImageStateWriteReq {
+	time.Sleep(100 * time.Millisecond)  ////
 	r := &ImageStateWriteReq{}
 	fillNmpReq(r, NMP_OP_WRITE, NMP_GROUP_IMAGE, NMP_ID_IMAGE_STATE)
 	return r
@@ -162,6 +165,7 @@ type CoreListRsp struct {
 }
 
 func NewCoreListReq() *CoreListReq {
+	time.Sleep(100 * time.Millisecond)  ////
 	r := &CoreListReq{}
 	fillNmpReq(r, NMP_OP_READ, NMP_GROUP_IMAGE, NMP_ID_IMAGE_CORELIST)
 	return r
@@ -193,6 +197,7 @@ type CoreLoadRsp struct {
 }
 
 func NewCoreLoadReq() *CoreLoadReq {
+	time.Sleep(100 * time.Millisecond)  ////
 	r := &CoreLoadReq{}
 	fillNmpReq(r, NMP_OP_READ, NMP_GROUP_IMAGE, NMP_ID_IMAGE_CORELOAD)
 	return r
@@ -220,6 +225,7 @@ type CoreEraseRsp struct {
 }
 
 func NewCoreEraseReq() *CoreEraseReq {
+	time.Sleep(100 * time.Millisecond)  ////
 	r := &CoreEraseReq{}
 	fillNmpReq(r, NMP_OP_WRITE, NMP_GROUP_IMAGE, NMP_ID_IMAGE_CORELOAD)
 	return r
@@ -247,6 +253,7 @@ type ImageEraseRsp struct {
 }
 
 func NewImageEraseReq() *ImageEraseReq {
+	time.Sleep(100 * time.Millisecond)  ////
 	r := &ImageEraseReq{}
 	fillNmpReq(r, NMP_OP_WRITE, NMP_GROUP_IMAGE, NMP_ID_IMAGE_ERASE)
 	return r

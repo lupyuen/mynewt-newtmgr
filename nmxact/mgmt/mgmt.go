@@ -29,7 +29,7 @@ import (
 )
 
 func EncodeMgmt(s sesn.Sesn, m *nmp.NmpMsg) ([]byte, error) {
-	time.Sleep(1) ////
+	time.Sleep(100 * time.Millisecond) ////
 	switch s.MgmtProto() {
 	case sesn.MGMT_PROTO_NMP:
 		return nmp.EncodeNmpPlain(m)

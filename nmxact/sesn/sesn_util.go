@@ -35,7 +35,7 @@ import (
 // response.
 func TxRxMgmt(s Sesn, m *nmp.NmpMsg, o TxOptions) (nmp.NmpRsp, error) {
 	_, task := trace.NewTask(context.Background(), "nmxact/sesn/sesn_util.go/TxRxMgmt")
-	time.Sleep(1)
+	time.Sleep(100 * time.Millisecond) ////
 	defer task.End()
 
 	retries := o.Tries - 1
@@ -53,7 +53,7 @@ func TxRxMgmt(s Sesn, m *nmp.NmpMsg, o TxOptions) (nmp.NmpRsp, error) {
 
 // TxCoap transmits a single CoAP message over the provided session.
 func TxCoap(s Sesn, mp nmcoap.MsgParams) error {
-	time.Sleep(1) ////
+	time.Sleep(100 * time.Millisecond) ////
 	msg, err := nmcoap.CreateMsg(s.CoapIsTcp(), mp)
 	if err != nil {
 		return err
@@ -65,7 +65,7 @@ func TxCoap(s Sesn, mp nmcoap.MsgParams) error {
 // RxCoap performs a blocking receive of a CoAP message.  It returns a nil
 // message if the specified listener is closed while the function is running.
 func RxCoap(cl *nmcoap.Listener, timeout time.Duration) (coap.Message, error) {
-	time.Sleep(1) ////
+	time.Sleep(100 * time.Millisecond) ////
 	if timeout != 0 {
 		for {
 			select {
@@ -92,7 +92,7 @@ func RxCoap(cl *nmcoap.Listener, timeout time.Duration) (coap.Message, error) {
 // TxRxMgmt sends a CoAP request and listens for the response.
 func TxRxCoap(s Sesn, mp nmcoap.MsgParams,
 	opts TxOptions) (coap.Message, error) {
-	time.Sleep(1) ////
+	time.Sleep(100 * time.Millisecond) ////
 
 	mc := nmcoap.MsgCriteria{Token: mp.Token}
 	cl, err := s.ListenCoap(mc)

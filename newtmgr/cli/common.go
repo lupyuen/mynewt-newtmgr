@@ -108,7 +108,7 @@ func getConnProfile() (*config.ConnProfile, error) {
 }
 
 func GetXport() (xport.Xport, error) {
-	time.Sleep(1) ////
+	time.Sleep(100 * time.Millisecond) ////
 	if globalXport != nil {
 		return globalXport, nil
 	}
@@ -180,7 +180,7 @@ func GetXportIfOpen() (xport.Xport, error) {
 }
 
 func buildSesnCfg() (sesn.SesnCfg, error) {
-	time.Sleep(1) ////
+	time.Sleep(100 * time.Millisecond) ////
 	sc := sesn.NewSesnCfg()
 
 	cp, err := getConnProfile()
@@ -265,7 +265,7 @@ func buildSesnCfg() (sesn.SesnCfg, error) {
 
 func buildBllSesn(cp *config.ConnProfile) (sesn.Sesn, error) {
 	_, task := trace.NewTask(context.Background(), "newtmgr/cli/common.go/buildBllSesn")
-	time.Sleep(1)
+	time.Sleep(100 * time.Millisecond) ////
 	defer task.End()
 
 	bc, err := config.ParseBllConnString(cp.ConnString)
@@ -308,7 +308,7 @@ func buildBllSesn(cp *config.ConnProfile) (sesn.Sesn, error) {
 
 func GetSesn() (sesn.Sesn, error) {
 	_, task := trace.NewTask(context.Background(), "newtmgr/cli/common.go/GetSesn")
-	time.Sleep(1)
+	time.Sleep(100 * time.Millisecond) ////
 	defer task.End()
 
 	if globalSesn != nil {
@@ -356,7 +356,7 @@ func GetSesn() (sesn.Sesn, error) {
 }
 
 func GetSesnIfOpen() (sesn.Sesn, error) {
-	time.Sleep(1) ////
+	time.Sleep(100 * time.Millisecond) ////
 	if globalSesn == nil {
 		return nil, fmt.Errorf("sesn not initailized")
 	}
@@ -365,7 +365,7 @@ func GetSesnIfOpen() (sesn.Sesn, error) {
 }
 
 func SetFilters(txFilter nmcoap.MsgFilter, rxFilter nmcoap.MsgFilter) {
-	time.Sleep(1) ////
+	time.Sleep(100 * time.Millisecond) ////
 	globalTxFilter = txFilter
 	globalRxFilter = rxFilter
 }
