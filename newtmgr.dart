@@ -237,7 +237,7 @@ class ImageStateReadCmd {
   Result Run(
     Sesn s  //  Previously sesn.Sesn
   ) {
-    final r = NewImageStateReadReq();  //  nmp.NewImageStateReadReq()
+    final r = NewImageStateReadReq();  //  Previously nmp.NewImageStateReadReq()
 
     final rsp = txReq(s, r.Msg(), this.base);
     final srsp = rsp.ImageStateRsp;  //  Previously nmp.ImageStateRsp
@@ -481,12 +481,12 @@ const
 
 int main() {
   //  List firmware images
-	final s = GetSesn();
-	final c = NewImageStateReadCmd();  //  Previously xact.NewImageStateReadCmd()
-	//  c.SetTxOptions(nmutil.TxOptions());
-	final res = c.Run(s);
-	final ires = res.(*xact.ImageStateReadResult);  //  Previously xact.ImageStateReadResult
-	//  imageStatePrintRsp(ires.Rsp);
+  final s = GetSesn();
+  final c = NewImageStateReadCmd();  //  Previously xact.NewImageStateReadCmd()
+  //  c.SetTxOptions(nmutil.TxOptions());
+  final res = c.Run(s);
+  final ires = res.ImageStateReadResult;  //  Previously xact.ImageStateReadResult
+  //  imageStatePrintRsp(ires.Rsp);
 
   /// An example of using the Map Builder class.
   /// Map builder is used to build maps with complex values such as tag values, indefinite sequences
