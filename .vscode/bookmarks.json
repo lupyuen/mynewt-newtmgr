@@ -86,6 +86,16 @@
 				"line": 371,
 				"column": 37,
 				"label": ""
+			},
+			{
+				"line": 385,
+				"column": 31,
+				"label": ""
+			},
+			{
+				"line": 388,
+				"column": 17,
+				"label": ""
 			}
 		]
 	},
@@ -135,6 +145,66 @@
 			{
 				"line": 29,
 				"column": 10,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$\\nmxact\\xact\\xact.go",
+		"bookmarks": [
+			{
+				"line": 26,
+				"column": 8,
+				"label": ""
+			},
+			{
+				"line": 40,
+				"column": 24,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$\\nmxact\\sesn\\sesn_util.go",
+		"bookmarks": [
+			{
+				"line": 33,
+				"column": 8,
+				"label": ""
+			},
+			{
+				"line": 36,
+				"column": 18,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$\\newtmgr\\bll\\bll_sesn.go",
+		"bookmarks": [
+			{
+				"line": 153,
+				"column": 39,
+				"label": ""
+			},
+			{
+				"line": 162,
+				"column": 16,
+				"label": ""
+			},
+			{
+				"line": 374,
+				"column": 22,
+				"label": ""
+			},
+			{
+				"line": 388,
+				"column": 22,
+				"label": ""
+			},
+			{
+				"line": 391,
+				"column": 17,
 				"label": ""
 			}
 		]
