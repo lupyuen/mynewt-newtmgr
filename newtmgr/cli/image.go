@@ -20,10 +20,12 @@
 package cli
 
 import (
+	"context"
 	"encoding/hex"
 	"fmt"
 	"io/ioutil"
 	"os"
+	"runtime/trace"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -89,6 +91,9 @@ func imageStatePrintRsp(rsp *nmp.ImageStateRsp) error {
 }
 
 func imageStateListCmd(cmd *cobra.Command, args []string) {
+	ctx, task := trace.NewTask(context.Background(), "newtmgr/cli/image.go/imageStateListCmd")
+	defer task.End()
+
 	s, err := GetSesn()
 	if err != nil {
 		nmUsage(nil, err)

@@ -19,6 +19,11 @@
 
 package nmp
 
+import (
+	"context"
+	"runtime/trace"
+)
+
 //////////////////////////////////////////////////////////////////////////////
 // $upload                                                                  //
 //////////////////////////////////////////////////////////////////////////////
@@ -117,6 +122,9 @@ type ImageStateRsp struct {
 }
 
 func NewImageStateReadReq() *ImageStateReadReq {
+	ctx, task := trace.NewTask(context.Background(), "nmxact/nmp/image.go/NewImageStateReadReq")
+	defer task.End()
+
 	r := &ImageStateReadReq{}
 	fillNmpReq(r, NMP_OP_READ, NMP_GROUP_IMAGE, NMP_ID_IMAGE_STATE)
 	return r

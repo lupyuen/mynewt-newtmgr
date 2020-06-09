@@ -20,12 +20,17 @@
 package xact
 
 import (
+	"context"
+	"runtime/trace"
+
 	"mynewt.apache.org/newtmgr/nmxact/nmp"
 	"mynewt.apache.org/newtmgr/nmxact/sesn"
 )
 
 func txReq(s sesn.Sesn, m *nmp.NmpMsg, c *CmdBase) (
 	nmp.NmpRsp, error) {
+	ctx, task := trace.NewTask(context.Background(), "nmxact/xact/xact.go/txReq")
+	defer task.End()
 
 	if c.abortErr != nil {
 		return nil, c.abortErr

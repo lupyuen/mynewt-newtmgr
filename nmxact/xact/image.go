@@ -20,8 +20,10 @@
 package xact
 
 import (
+	"context"
 	"crypto/sha256"
 	"fmt"
+	"runtime/trace"
 
 	pb "gopkg.in/cheggaaa/pb.v1"
 
@@ -370,6 +372,9 @@ type ImageStateReadResult struct {
 }
 
 func NewImageStateReadCmd() *ImageStateReadCmd {
+	ctx, task := trace.NewTask(context.Background(), "nmxact/xact/image.go/NewImageStateReadCmd")
+	defer task.End()
+
 	return &ImageStateReadCmd{
 		CmdBase: NewCmdBase(),
 	}
@@ -384,6 +389,9 @@ func (r *ImageStateReadResult) Status() int {
 }
 
 func (c *ImageStateReadCmd) Run(s sesn.Sesn) (Result, error) {
+	ctx, task := trace.NewTask(context.Background(), "nmxact/xact/image.go/Run")
+	defer task.End()
+
 	r := nmp.NewImageStateReadReq()
 
 	rsp, err := txReq(s, r.Msg(), &c.CmdBase)
