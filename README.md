@@ -37,11 +37,28 @@ a device and sends command requests to the device.
 The newtmgr tool documentation can be found under [/docs](/docs) which are
 published at http://mynewt.apache.org/latest/os/modules/devmgmt/newtmgr.html
 
-### Building
+### Building and Running
 
-Build the newtmgr tool as follows:
+Build and run the newtmgr tool as follows:
 
-1. Unpack newtmgr source.
-2. Rename resulting `apache-mynewt-newtmgr-1.3.0` directory to `$GOPATH/src/mynewt.apache.org/newtmgr`
-3. `cd $GOPATH/src/mynewt.apache.org/newtmgr/newtmgr`
-4. `GO111MODULE=on go build`
+```bash
+sudo apt install graphviz
+
+# Build Newt Manager on Raspberry Pi or Pinebook Pro
+cd ~/go
+mkdir -p src/mynewt.apache.org
+cd src/mynewt.apache.org/
+git clone https://github.com/lupyuen/mynewt-newtmgr
+mv mynewt-newtmgr newtmgr
+cd newtmgr/newtmgr
+export GO111MODULE=on
+go build
+
+cd ~/go/src/mynewt.apache.org/newtmgr/newtmgr
+
+sudo ./newtmgr conn add pinetime type=ble connstring="peer_name=pinetime" 2> /dev/null
+
+sudo ./newtmgr image list -c pinetime 2> trace.out
+
+go tool trace trace.out
+```
