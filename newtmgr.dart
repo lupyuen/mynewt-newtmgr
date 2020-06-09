@@ -222,6 +222,51 @@ String hexDump(typed.Uint8Buffer buf) {
 }
 
 ////////////////////////////////////////
+//  nmxact/xact/image.go
+//  Converted from Go: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/xact/image.go
+
+//////////////////////////////////////////////////////////////////////////////
+// $state read                                                              //
+//////////////////////////////////////////////////////////////////////////////
+
+class ImageStateReadCmd {
+	CmdBase base;
+
+  ImageStateReadCmd(this.base);
+
+  Result Run(
+    Sesn s  //  Previously sesn.Sesn
+  ) {
+    final r = NewImageStateReadReq();  //  nmp.NewImageStateReadReq()
+
+    final rsp = txReq(s, r.Msg(), this.base);
+    final srsp = rsp.ImageStateRsp;  //  Previously nmp.ImageStateRsp
+
+    var res = newImageStateReadResult();
+    res.Rsp = srsp;
+    return res;
+  }
+}
+
+class ImageStateReadResult {
+	ImageStateRsp Rsp;  //  Previously nmp.ImageStateRsp
+
+  int Status() {
+    return this.Rsp.Rc;
+  }
+}
+
+ImageStateReadCmd NewImageStateReadCmd() {
+	return ImageStateReadCmd(
+		NewCmdBase()
+  );
+}
+
+ImageStateReadResult newImageStateReadResult() {
+	return ImageStateReadResult();
+}
+
+////////////////////////////////////////
 //  nmxact/nmp/image.go
 //  Converted from Go: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/nmp/image.go
 
