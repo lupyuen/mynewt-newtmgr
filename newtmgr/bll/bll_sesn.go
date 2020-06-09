@@ -157,6 +157,7 @@ func (s *BllSesn) txWriteCharacteristic(
 	b []byte,
 	noRsp bool) error {
 	_, task := trace.NewTask(context.Background(), "newtmgr/bll/bll_sesn.go/txWriteCharacteristic")
+	time.Sleep(1)
 	defer task.End()
 
 	cln, err := s.getCln()
@@ -378,6 +379,7 @@ func (s *BllSesn) RxCoap(opt sesn.TxOptions) (coap.Message, error) {
 func (s *BllSesn) TxRxMgmt(m *nmp.NmpMsg,
 	timeout time.Duration) (nmp.NmpRsp, error) {
 	_, task := trace.NewTask(context.Background(), "newtmgr/bll/bll_sesn.go/TxRxMgmt")
+	time.Sleep(1)
 	defer task.End()
 
 	if !s.IsOpen() {

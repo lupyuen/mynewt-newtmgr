@@ -3,7 +3,7 @@
 		"path": "$ROOTPATH$/newtmgr/cli/image.go",
 		"bookmarks": [
 			{
-				"line": 92,
+				"line": 93,
 				"column": 15,
 				"label": ""
 			}
@@ -13,12 +13,12 @@
 		"path": "$ROOTPATH$/newtmgr/cli/common.go",
 		"bookmarks": [
 			{
-				"line": 262,
+				"line": 263,
 				"column": 11,
 				"label": ""
 			},
 			{
-				"line": 304,
+				"line": 306,
 				"column": 9,
 				"label": ""
 			}
@@ -28,17 +28,17 @@
 		"path": "$ROOTPATH$/nmxact/xact/image.go",
 		"bookmarks": [
 			{
-				"line": 373,
+				"line": 374,
 				"column": 14,
 				"label": ""
 			},
 			{
-				"line": 390,
+				"line": 392,
 				"column": 29,
 				"label": ""
 			},
 			{
-				"line": 394,
+				"line": 397,
 				"column": 24,
 				"label": ""
 			}
@@ -48,7 +48,7 @@
 		"path": "$ROOTPATH$/nmxact/nmp/image.go",
 		"bookmarks": [
 			{
-				"line": 123,
+				"line": 124,
 				"column": 37,
 				"label": ""
 			}
@@ -88,12 +88,12 @@
 		"path": "$ROOTPATH$/nmxact/xact/xact.go",
 		"bookmarks": [
 			{
-				"line": 29,
+				"line": 30,
 				"column": 8,
 				"label": ""
 			},
 			{
-				"line": 45,
+				"line": 47,
 				"column": 24,
 				"label": ""
 			}
@@ -108,7 +108,7 @@
 				"label": ""
 			},
 			{
-				"line": 41,
+				"line": 42,
 				"column": 18,
 				"label": ""
 			}
@@ -123,22 +123,22 @@
 				"label": ""
 			},
 			{
-				"line": 165,
+				"line": 166,
 				"column": 16,
 				"label": ""
 			},
 			{
-				"line": 377,
+				"line": 378,
 				"column": 22,
 				"label": ""
 			},
 			{
-				"line": 393,
+				"line": 395,
 				"column": 22,
 				"label": ""
 			},
 			{
-				"line": 396,
+				"line": 398,
 				"column": 17,
 				"label": ""
 			}

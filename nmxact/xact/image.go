@@ -24,6 +24,7 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"runtime/trace"
+	"time"
 
 	pb "gopkg.in/cheggaaa/pb.v1"
 
@@ -373,6 +374,7 @@ type ImageStateReadResult struct {
 
 func NewImageStateReadCmd() *ImageStateReadCmd {
 	_, task := trace.NewTask(context.Background(), "nmxact/xact/image.go/NewImageStateReadCmd")
+	time.Sleep(1)
 	defer task.End()
 
 	return &ImageStateReadCmd{
@@ -390,6 +392,7 @@ func (r *ImageStateReadResult) Status() int {
 
 func (c *ImageStateReadCmd) Run(s sesn.Sesn) (Result, error) {
 	_, task := trace.NewTask(context.Background(), "nmxact/xact/image.go/Run")
+	time.Sleep(1)
 	defer task.End()
 
 	r := nmp.NewImageStateReadReq()

@@ -22,6 +22,7 @@ package nmp
 import (
 	"context"
 	"runtime/trace"
+	"time"
 )
 
 //////////////////////////////////////////////////////////////////////////////
@@ -123,6 +124,7 @@ type ImageStateRsp struct {
 
 func NewImageStateReadReq() *ImageStateReadReq {
 	_, task := trace.NewTask(context.Background(), "nmxact/nmp/image.go/NewImageStateReadReq")
+	time.Sleep(1)
 	defer task.End()
 
 	r := &ImageStateReadReq{}

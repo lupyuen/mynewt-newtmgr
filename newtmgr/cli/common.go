@@ -23,6 +23,7 @@ import (
 	"context"
 	"fmt"
 	"runtime/trace"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 
@@ -262,6 +263,7 @@ func buildSesnCfg() (sesn.SesnCfg, error) {
 
 func buildBllSesn(cp *config.ConnProfile) (sesn.Sesn, error) {
 	_, task := trace.NewTask(context.Background(), "newtmgr/cli/common.go/buildBllSesn")
+	time.Sleep(1)
 	defer task.End()
 
 	bc, err := config.ParseBllConnString(cp.ConnString)
@@ -304,6 +306,7 @@ func buildBllSesn(cp *config.ConnProfile) (sesn.Sesn, error) {
 
 func GetSesn() (sesn.Sesn, error) {
 	_, task := trace.NewTask(context.Background(), "newtmgr/cli/common.go/GetSesn")
+	time.Sleep(1)
 	defer task.End()
 
 	if globalSesn != nil {
