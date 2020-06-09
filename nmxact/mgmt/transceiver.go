@@ -193,8 +193,8 @@ func (t *Transceiver) TxCoap(txCb TxFn, req coap.Message, mtu int) error {
 }
 
 func (t *Transceiver) ListenCoap(
-	time.Sleep(1) ////
 	mc nmcoap.MsgCriteria) (*nmcoap.Listener, error) {
+	time.Sleep(1) ////
 
 	mc.Path = strings.TrimPrefix(mc.Path, "/")
 
