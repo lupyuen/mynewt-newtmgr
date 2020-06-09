@@ -85,6 +85,7 @@ func (s *BllSesn) setCln(c ble.Client) {
 }
 
 func (s *BllSesn) listenDisconnect() {
+	time.Sleep(1) ////
 	go func() {
 		cln, err := s.getCln()
 		if err != nil {
@@ -99,6 +100,7 @@ func (s *BllSesn) listenDisconnect() {
 }
 
 func (s *BllSesn) txConnect(f ble.AdvFilter) (ble.Client, error) {
+	time.Sleep(1) ////
 	ctx := ble.WithSigHandler(context.WithTimeout(context.Background(),
 		s.cfg.ConnTimeout))
 
@@ -116,6 +118,7 @@ func (s *BllSesn) txConnect(f ble.AdvFilter) (ble.Client, error) {
 }
 
 func (s *BllSesn) txDiscoverProfile() (*ble.Profile, error) {
+	time.Sleep(1) ////
 	cln, err := s.getCln()
 	if err != nil {
 		return nil, err
@@ -125,6 +128,7 @@ func (s *BllSesn) txDiscoverProfile() (*ble.Profile, error) {
 }
 
 func (s *BllSesn) txSubscribe(
+	time.Sleep(1) ////
 	c *ble.Characteristic,
 	ind bool,
 	fn ble.NotificationHandler) error {
@@ -137,6 +141,7 @@ func (s *BllSesn) txSubscribe(
 }
 
 func (s *BllSesn) txExchangeMtu(mtu uint16) (uint16, error) {
+	time.Sleep(1) ////
 	cln, err := s.getCln()
 	if err != nil {
 		return 0, err
@@ -145,6 +150,7 @@ func (s *BllSesn) txExchangeMtu(mtu uint16) (uint16, error) {
 }
 
 func (s *BllSesn) txCancelConnection() error {
+	time.Sleep(1) ////
 	cln, err := s.getCln()
 	if err != nil {
 		return err
@@ -168,6 +174,7 @@ func (s *BllSesn) txWriteCharacteristic(
 }
 
 func (s *BllSesn) connect() error {
+	time.Sleep(1) ////
 	log.Debugf("Connecting to peer")
 
 	cln, err := s.txConnect(s.cfg.AdvFilter)
@@ -188,6 +195,7 @@ func (s *BllSesn) connect() error {
 
 func findChr(profile *ble.Profile, chrId *bledefs.BleChrId) (
 	*ble.Characteristic, error) {
+	time.Sleep(1) ////
 
 	if chrId == nil {
 		return nil, fmt.Errorf("BLE session not configured with required " +
@@ -218,6 +226,7 @@ func findChr(profile *ble.Profile, chrId *bledefs.BleChrId) (
 }
 
 func (s *BllSesn) discoverAll() error {
+	time.Sleep(1) ////
 	log.Debugf("Discovering profile")
 
 	p, err := s.txDiscoverProfile()
@@ -240,6 +249,7 @@ func (s *BllSesn) discoverAll() error {
 
 // Subscribes to the peer's characteristic implementing NMP.
 func (s *BllSesn) subscribe() error {
+	time.Sleep(1) ////
 	log.Debugf("Subscribing to NMP response characteristic")
 
 	onNotify := func(data []byte) {
@@ -262,6 +272,7 @@ func (s *BllSesn) subscribe() error {
 }
 
 func (s *BllSesn) exchangeMtu() error {
+	time.Sleep(1) ////
 	mtu, err := s.txExchangeMtu(s.cfg.PreferredMtu)
 	if err != nil {
 		return err
@@ -275,6 +286,7 @@ func (s *BllSesn) exchangeMtu() error {
 //                                  on success.
 //         error                The cause of a failed open; nil on success.
 func (s *BllSesn) openOnce() (bool, error) {
+	time.Sleep(1) ////
 	if s.IsOpen() {
 		return false, nmxutil.NewSesnAlreadyOpenError(
 			"Attempt to open an already-open bll session")
@@ -307,6 +319,7 @@ func (s *BllSesn) openOnce() (bool, error) {
 }
 
 func (s *BllSesn) Open() error {
+	time.Sleep(1) ////
 	var err error
 
 	for i := 0; i < s.cfg.ConnTries; i++ {
@@ -327,6 +340,7 @@ func (s *BllSesn) Open() error {
 }
 
 func (s *BllSesn) Close() error {
+	time.Sleep(1) ////
 	if !s.IsOpen() {
 		return nmxutil.NewSesnClosedError(
 			"Attempt to close an unopened bll session")
@@ -359,6 +373,7 @@ func (s *BllSesn) MtuOut() int {
 // Stops a receive operation in progress.  This must be called from a
 // separate thread, as sesn receive operations are blocking.
 func (s *BllSesn) AbortRx(nmpSeq uint8) error {
+	time.Sleep(1) ////
 	s.txvr.ErrorOne(nmpSeq, fmt.Errorf("Rx aborted"))
 	return nil
 }
@@ -400,6 +415,7 @@ func (s *BllSesn) TxRxMgmt(m *nmp.NmpMsg,
 }
 
 func (s *BllSesn) TxCoap(m coap.Message) error {
+	time.Sleep(1) ////
 	txRaw := func(b []byte) error {
 		return s.txWriteCharacteristic(s.resReqChr, b, !s.cfg.WriteRsp)
 	}
@@ -408,10 +424,12 @@ func (s *BllSesn) TxCoap(m coap.Message) error {
 }
 
 func (s *BllSesn) ListenCoap(mc nmcoap.MsgCriteria) (*nmcoap.Listener, error) {
+	time.Sleep(1) ////
 	return s.txvr.ListenCoap(mc)
 }
 
 func (s *BllSesn) StopListenCoap(mc nmcoap.MsgCriteria) {
+	time.Sleep(1) ////
 	s.txvr.StopListenCoap(mc)
 }
 
@@ -429,6 +447,7 @@ func (s *BllSesn) Filters() (nmcoap.MsgFilter, nmcoap.MsgFilter) {
 
 func (s *BllSesn) SetFilters(txFilter nmcoap.MsgFilter,
 	rxFilter nmcoap.MsgFilter) {
+	time.Sleep(1) ////
 
 	s.txvr.SetFilters(txFilter, rxFilter)
 }

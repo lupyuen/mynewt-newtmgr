@@ -108,6 +108,7 @@ func getConnProfile() (*config.ConnProfile, error) {
 }
 
 func GetXport() (xport.Xport, error) {
+	time.Sleep(1) ////
 	if globalXport != nil {
 		return globalXport, nil
 	}
@@ -179,6 +180,7 @@ func GetXportIfOpen() (xport.Xport, error) {
 }
 
 func buildSesnCfg() (sesn.SesnCfg, error) {
+	time.Sleep(1) ////
 	sc := sesn.NewSesnCfg()
 
 	cp, err := getConnProfile()
@@ -354,6 +356,7 @@ func GetSesn() (sesn.Sesn, error) {
 }
 
 func GetSesnIfOpen() (sesn.Sesn, error) {
+	time.Sleep(1) ////
 	if globalSesn == nil {
 		return nil, fmt.Errorf("sesn not initailized")
 	}
@@ -362,6 +365,7 @@ func GetSesnIfOpen() (sesn.Sesn, error) {
 }
 
 func SetFilters(txFilter nmcoap.MsgFilter, rxFilter nmcoap.MsgFilter) {
+	time.Sleep(1) ////
 	globalTxFilter = txFilter
 	globalRxFilter = rxFilter
 }
