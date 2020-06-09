@@ -261,7 +261,7 @@ func buildSesnCfg() (sesn.SesnCfg, error) {
 }
 
 func buildBllSesn(cp *config.ConnProfile) (sesn.Sesn, error) {
-	ctx, task := trace.NewTask(context.Background(), "newtmgr/cli/common.go/buildBllSesn")
+	_, task := trace.NewTask(context.Background(), "newtmgr/cli/common.go/buildBllSesn")
 	defer task.End()
 
 	bc, err := config.ParseBllConnString(cp.ConnString)
@@ -303,7 +303,7 @@ func buildBllSesn(cp *config.ConnProfile) (sesn.Sesn, error) {
 }
 
 func GetSesn() (sesn.Sesn, error) {
-	ctx, task := trace.NewTask(context.Background(), "newtmgr/cli/common.go/GetSesn")
+	_, task := trace.NewTask(context.Background(), "newtmgr/cli/common.go/GetSesn")
 	defer task.End()
 
 	if globalSesn != nil {

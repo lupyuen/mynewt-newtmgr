@@ -34,7 +34,7 @@ import (
 // TxRxMgmt sends a management command (NMP / OMP) and listens for the
 // response.
 func TxRxMgmt(s Sesn, m *nmp.NmpMsg, o TxOptions) (nmp.NmpRsp, error) {
-	ctx, task := trace.NewTask(context.Background(), "nmxact/sesn/sesn_util.go/TxRxMgmt")
+	_, task := trace.NewTask(context.Background(), "nmxact/sesn/sesn_util.go/TxRxMgmt")
 	defer task.End()
 
 	retries := o.Tries - 1

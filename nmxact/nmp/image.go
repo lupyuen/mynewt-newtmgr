@@ -122,7 +122,7 @@ type ImageStateRsp struct {
 }
 
 func NewImageStateReadReq() *ImageStateReadReq {
-	ctx, task := trace.NewTask(context.Background(), "nmxact/nmp/image.go/NewImageStateReadReq")
+	_, task := trace.NewTask(context.Background(), "nmxact/nmp/image.go/NewImageStateReadReq")
 	defer task.End()
 
 	r := &ImageStateReadReq{}

@@ -372,7 +372,7 @@ type ImageStateReadResult struct {
 }
 
 func NewImageStateReadCmd() *ImageStateReadCmd {
-	ctx, task := trace.NewTask(context.Background(), "nmxact/xact/image.go/NewImageStateReadCmd")
+	_, task := trace.NewTask(context.Background(), "nmxact/xact/image.go/NewImageStateReadCmd")
 	defer task.End()
 
 	return &ImageStateReadCmd{
@@ -389,7 +389,7 @@ func (r *ImageStateReadResult) Status() int {
 }
 
 func (c *ImageStateReadCmd) Run(s sesn.Sesn) (Result, error) {
-	ctx, task := trace.NewTask(context.Background(), "nmxact/xact/image.go/Run")
+	_, task := trace.NewTask(context.Background(), "nmxact/xact/image.go/Run")
 	defer task.End()
 
 	r := nmp.NewImageStateReadReq()
