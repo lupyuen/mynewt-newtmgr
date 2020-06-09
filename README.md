@@ -21,13 +21,7 @@
 
 # Updates for PineTime Companion App
 
-```bash
-sudo apt install graphviz
-cd ~/go/src/mynewt.apache.org/newtmgr/newtmgr
-sudo ./newtmgr conn add pinetime type=ble connstring="peer_name=pinetime"
-sudo ./newtmgr image list -c pinetime 2> trace.out
-go tool trace trace.out
-```
+See [`newtmgr.dart`](newtmgr.dart) for newtmgr converted from Go to Dart.
 
 # Newtmgr
 
@@ -44,16 +38,19 @@ Build and run the newtmgr tool as follows:
 ```bash
 sudo apt install graphviz
 
-# Build Newt Manager on Raspberry Pi or Pinebook Pro
+# Download Newt Manager on Raspberry Pi or Pinebook Pro
 cd ~/go
 mkdir -p src/mynewt.apache.org
 cd src/mynewt.apache.org/
 git clone https://github.com/lupyuen/mynewt-newtmgr
 mv mynewt-newtmgr newtmgr
-cd newtmgr/newtmgr
+
+# Build Newt Manager on Raspberry Pi or Pinebook Pro
+cd ~/go/src/mynewt.apache.org/newtmgr/newtmgr
 export GO111MODULE=on
 go build
 
+# Run Newt Manager on Raspberry Pi or Pinebook Pro
 cd ~/go/src/mynewt.apache.org/newtmgr/newtmgr
 
 sudo ./newtmgr conn add pinetime type=ble connstring="peer_name=pinetime" 2> /dev/null
