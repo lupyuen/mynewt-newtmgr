@@ -479,15 +479,6 @@ const
 
 ////////////////////////////////////////
 
-/*
-void main() {
-  print("Hello");
-}
-*/
-
-/// An example of using the Map Builder class.
-/// Map builder is used to build maps with complex values such as tag values, indefinite sequences
-/// and the output of other list or map builders.
 int main() {
   //  List firmware images
 	final s = GetSesn();
@@ -496,6 +487,10 @@ int main() {
 	final res = c.Run(s);
 	final ires = res.(*xact.ImageStateReadResult);  //  Previously xact.ImageStateReadResult
 	//  imageStatePrintRsp(ires.Rsp);
+
+  /// An example of using the Map Builder class.
+  /// Map builder is used to build maps with complex values such as tag values, indefinite sequences
+  /// and the output of other list or map builders.
 
   // Get our cbor instance, always do this,it correctly
   // initialises the decoder.
