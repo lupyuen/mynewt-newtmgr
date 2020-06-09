@@ -128,10 +128,10 @@ func (s *BllSesn) txDiscoverProfile() (*ble.Profile, error) {
 }
 
 func (s *BllSesn) txSubscribe(
-	time.Sleep(1) ////
 	c *ble.Characteristic,
 	ind bool,
 	fn ble.NotificationHandler) error {
+	time.Sleep(1) ////
 
 	cln, err := s.getCln()
 	if err != nil {
@@ -408,6 +408,7 @@ func (s *BllSesn) TxRxMgmt(m *nmp.NmpMsg,
 	}
 
 	txRaw := func(b []byte) error {
+		time.Sleep(1) ////
 		return s.txWriteCharacteristic(s.nmpReqChr, b, true)
 	}
 
