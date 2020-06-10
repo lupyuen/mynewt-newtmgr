@@ -427,7 +427,7 @@ abstract class Cmd {
 	Result Run(Sesn s);                //  Previously sesn.Sesn
 	void Abort();
 
-	TxOptions TxOptions();             //  Previously sesn.TxOptions
+	//  TxOptions TxOptions();             //  Previously sesn.TxOptions
 	void SetTxOptions(TxOptions opt);  //  Previously sesn.TxOptions
 }
 
@@ -441,9 +441,11 @@ mixin CmdBase {
   /// Constructor
   //  CmdBase(this.txOptions);
 
+  /*
   TxOptions TxOptions() {  //  Previously sesn.TxOptions
     return this.txOptions;
   }
+  */
 
   void SetTxOptions(
     TxOptions opt  //  Previously sesn.TxOptions
@@ -452,7 +454,7 @@ mixin CmdBase {
   }
 
   void Abort() {
-    if (this.curSesn) {
+    if (this.curSesn != null) {
         this.curSesn.AbortRx(this.curNmpSeq);
     }
     this.abortErr = Exception("Command aborted");
@@ -552,6 +554,20 @@ const
   NMP_ID_SHELL_EXEC = 0;
 
 ////////////////////////////////////////
+//  TODO
+
+/// Bluetooth LE Session
+class Sesn {}
+
+/// Bluetooth LE Transmission Options
+class TxOptions {}
+
+Sesn GetSesn() {
+  return Sesn();
+}
+
+////////////////////////////////////////
+//  main
 
 int main() {
   //  List firmware images
