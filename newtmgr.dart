@@ -470,24 +470,29 @@ CmdBase NewCmdBase() {
 //  nmxact/xact/xact.go
 //  Converted from Go: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/xact/xact.go
 
+/// Transmit an SMP Request and get the SMP Response
 NmpRsp txReq(  //  Returns nmp.NmpRsp
   Sesn s,      //  Previously sesn.Sesn
   NmpMsg m,    //  Previously nmp.NmpMsg
   CmdBase c
 ) {
-	if (c.abortErr != null) {
-    throw c.abortErr;
-	}
-
-	c.curNmpSeq = m.Hdr.Seq;
-	c.curSesn = s;
+  //  TODO: assert(c != null);
+  if (c != null) {  //  TODO: Should not be null
+    if (c.abortErr != null) {
+      throw c.abortErr;
+    }
+    c.curNmpSeq = m.Hdr.Seq;
+    c.curSesn = s;
+  }
 
 	//  TODO: final rsp = sesn.TxRxMgmt(s, m, c.TxOptions());
   final rsp = ImageStateRsp();
   final data = EncodeNmpPlain(m);
 
-  c.curNmpSeq = 0;
-  c.curSesn = null;
+  if (c != null) {  //  TODO: Should not be null
+    c.curNmpSeq = 0;
+    c.curSesn = null;
+  }
 	return rsp;
 }
 
@@ -610,15 +615,27 @@ TxOptions NewTxOptions() {
 ////////////////////////////////////////
 //  Send Simple Mgmt Protocol Command to PineTime over Bluetooth LE
 
-int main() {
-  //  Query firmware images on PineTime
+/// Query firmware images on PineTime
+void main() {
+  //  Fetch the Bluetooth LE Session
   final s = GetSesn();
+
+  //  Create the SMP Command
   final c = NewImageStateReadCmd();  //  Previously xact.NewImageStateReadCmd()
+
+  //  TODO: Set the Bluetooth LE transmission options
   //  c.SetTxOptions(nmutil.TxOptions());
+
+  //  Transmit the SMP Command
   final res = c.Run(s);
+
+  //  TODO: Handle SMP Response
   //  final ires = res.ImageStateReadResult;  //  Previously xact.ImageStateReadResult
   //  imageStatePrintRsp(ires.Rsp);
+}
 
+/// Test the CBOR library
+void testCbor() {
   /// An example of using the Map Builder class.
   /// Map builder is used to build maps with complex values such as tag values, indefinite sequences
   /// and the output of other list or map builders.
@@ -676,6 +693,4 @@ int main() {
   //  Get the encoded body
   final data = inst.output.getData();
   print("Encoded ${ inst.decodedToJSON() } to:\n${ hexDump(data) }");
-
-  return 0;
 }
