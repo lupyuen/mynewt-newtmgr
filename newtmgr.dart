@@ -338,11 +338,10 @@ class ImageStateReadReq
 
   NmpMsg Msg() { return MsgFromReq(this); }
 
+  /// TODO: Encode the request fields to CBOR
   void Encode(cbor.Encoder encoder) {
-    //  TODO
-    // Encode some values
-    encoder.writeArray(<int>[1, 2, 3]);
-    encoder.writeFloat(67.89);
+    //  encoder.writeArray(<int>[1, 2, 3]);
+    //  encoder.writeFloat(67.89);
     encoder.writeInt(10);
   }
 }
