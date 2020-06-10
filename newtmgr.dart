@@ -577,9 +577,11 @@ const
   NMP_ID_SHELL_EXEC = 0;
 
 ////////////////////////////////////////
-//  TODO
+//  TODO: Check response from PineTime
 
-class ImageStateRsp implements NmpRsp {
+class ImageStateRsp 
+  implements NmpRsp
+{
 }
 
 /// Bluetooth LE Session
@@ -597,10 +599,10 @@ TxOptions NewTxOptions() {
 }
 
 ////////////////////////////////////////
-//  main
+//  Send Simple Mgmt Protocol Command to PineTime over Bluetooth LE
 
 int main() {
-  //  List firmware images
+  //  Query firmware images on PineTime
   final s = GetSesn();
   final c = NewImageStateReadCmd();  //  Previously xact.NewImageStateReadCmd()
   //  c.SetTxOptions(nmutil.TxOptions());
