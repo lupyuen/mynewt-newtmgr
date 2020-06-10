@@ -584,6 +584,8 @@ class ImageStateRsp
   implements NmpRsp
 {
   //  TODO
+  int Rc;
+  //  TODO
   NmpHdr Hdr() { return NmpHdr(0, 0, 0, 0, 0, 0); }
   //  TODO
   NmpMsg Msg() { return NmpMsg(null, null); }
