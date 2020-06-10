@@ -81,7 +81,7 @@ abstract class NmpReq {
   void SetHdr(NmpHdr hdr);
 
   NmpMsg Msg();
-  void Encode(cbor.Encoder encoder);
+  void Encode(cbor.MapBuilder builder);
 }
 
 /// SMP Response Message
@@ -139,25 +139,27 @@ NmpHdr DecodeNmpHdr(typed.Uint8Buffer data /* []byte */) {
 }
 
 /// Encode SMP Request Body with CBOR and return the byte array
-typed.Uint8Buffer BodyBytes(
+typed.Uint8Buffer BodyBytes(  //  Returns []byte
   NmpReq body  //  Previously interface{}
-) {  //  Returns []byte
-  // Get our cbor instance, always do this,it correctly
-  // initialises the decoder.
+) {
+  // Get our cbor instance, always do this, it correctly initialises the decoder.
   final inst = cbor.Cbor();
 
-  // Get our encoder
+  // Get our encoder and map builder
   final encoder = inst.encoder;
+  final mapBuilder = cbor.MapBuilder.builder();
 
-  //  Encode the body
-  body.Encode(encoder);
+  //  Encode the body as a CBOR map
+  body.Encode(mapBuilder);
+  final mapData = mapBuilder.getData();
+  encoder.addBuilderOutput(mapData);
 
   //  Get the encoded body
   final data = inst.output.getData();
 
   //  Decode the encoded body and pretty print it
   inst.decodeFromInput();
-  print(inst.decodedPrettyPrint(false));
+  //  print(inst.decodedPrettyPrint(false));
   print("Encoded ${ inst.decodedToJSON() } to:\n${ hexDump(data) }");
   return data;
 }
@@ -339,10 +341,7 @@ class ImageStateReadReq
   NmpMsg Msg() { return MsgFromReq(this); }
 
   /// Encode the SMP Request fields to CBOR
-  void Encode(cbor.Encoder encoder) {
-    // Get our map builder
-    final mapBuilder = cbor.MapBuilder.builder();
-
+  void Encode(cbor.MapBuilder builder) {
     // Add some map entries to the list.
     // Entries are added as a key followed by a value, this ordering is enforced.
     // Map keys can be integers or strings only, this is also enforced.
@@ -359,8 +358,6 @@ class ImageStateReadReq
     // Use the addBuilderOutput method to add built output to the encoder.
     // You can use the addBuilderOutput method on the map builder to add
     // the output of other list or map builders to its encoding stream.
-    final mapData = mapBuilder.getData();
-    encoder.addBuilderOutput(mapData);
 
     //  encoder.writeArray(<int>[1, 2, 3]);
     //  encoder.writeFloat(67.89);
