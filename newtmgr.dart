@@ -155,13 +155,9 @@ typed.Uint8Buffer BodyBytes(
   //  Get the encoded body
   final data = inst.output.getData();
 
-  // Decode ourselves and pretty print it.
+  //  Decode the encoded body and pretty print it
   inst.decodeFromInput();
   print(inst.decodedPrettyPrint(false));
-
-  // Finally to JSON
-  print(inst.decodedToJSON());
-
   print("Encoded ${ inst.decodedToJSON() } to:\n${ hexDump(data) }");
   return data;
 }
@@ -461,37 +457,36 @@ mixin CmdBase {
   }
 }
 
+/*
 CmdBase NewCmdBase() {
 	return CmdBase(
 		NewTxOptions()  //  Previously sesn.NewTxOptions
   );
 }
+*/
 
 ////////////////////////////////////////
 //  nmxact/xact/xact.go
 //  Converted from Go: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/xact/xact.go
 
-NmpRsp txReq(
-  Sesn s,     //  Previously sesn.Sesn
-  NmpMsg m,   //  Previously nmp.NmpMsg
+NmpRsp txReq(  //  Returns nmp.NmpRsp
+  Sesn s,      //  Previously sesn.Sesn
+  NmpMsg m,    //  Previously nmp.NmpMsg
   CmdBase c
-) {  //  Returns nmp.NmpRsp
+) {
 	if (c.abortErr != null) {
-		return nil, c.abortErr;
+    throw c.abortErr;
 	}
 
 	c.curNmpSeq = m.Hdr.Seq;
 	c.curSesn = s;
-	defer func() {
-		c.curNmpSeq = 0;
-		c.curSesn = nil;
-	}()
 
-	rsp, err := sesn.TxRxMgmt(s, m, c.TxOptions());
-	if (err != null) {
-		return nil;
-	}
+	//  TODO: final rsp = sesn.TxRxMgmt(s, m, c.TxOptions());
+  final rsp = ImageStateRsp();
+  final data = EncodeNmpPlain(m);
 
+  c.curNmpSeq = 0;
+  c.curSesn = null;
 	return rsp;
 }
 
@@ -584,6 +579,9 @@ const
 ////////////////////////////////////////
 //  TODO
 
+class ImageStateRsp implements NmpRsp {
+}
+
 /// Bluetooth LE Session
 class Sesn {}
 
@@ -607,7 +605,7 @@ int main() {
   final c = NewImageStateReadCmd();  //  Previously xact.NewImageStateReadCmd()
   //  c.SetTxOptions(nmutil.TxOptions());
   final res = c.Run(s);
-  final ires = res.ImageStateReadResult;  //  Previously xact.ImageStateReadResult
+  //  final ires = res.ImageStateReadResult;  //  Previously xact.ImageStateReadResult
   //  imageStatePrintRsp(ires.Rsp);
 
   /// An example of using the Map Builder class.
