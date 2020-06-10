@@ -582,6 +582,12 @@ const
 class ImageStateRsp 
   implements NmpRsp
 {
+  //  TODO
+  NmpHdr Hdr() { return NmpHdr(0, 0, 0, 0, 0, 0); }
+  //  TODO
+  NmpMsg Msg() { return NmpMsg(null, null); }
+  //  TODO
+  void SetHdr(NmpHdr msg) {}
 }
 
 /// Bluetooth LE Session
