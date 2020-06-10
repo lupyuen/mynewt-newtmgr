@@ -249,7 +249,7 @@ class ImageStateReadCmd
 {
   CmdBase base;
 
-  ImageStateReadCmd(this.base);
+  //  TODO: ImageStateReadCmd(this.base);
 
   Result Run(
     Sesn s  //  Previously sesn.Sesn
@@ -257,10 +257,11 @@ class ImageStateReadCmd
     final r = NewImageStateReadReq();  //  Previously nmp.NewImageStateReadReq()
 
     final rsp = txReq(s, r.Msg(), this.base);
-    final srsp = rsp.ImageStateRsp;  //  Previously nmp.ImageStateRsp
+    
+    //  TODO: final srsp = rsp.ImageStateRsp;  //  Previously nmp.ImageStateRsp
 
     var res = newImageStateReadResult();
-    res.Rsp = srsp;
+    //  TODO: res.Rsp = srsp;
     return res;
   }
 }
@@ -275,7 +276,7 @@ class ImageStateReadResult implements Result {
 
 ImageStateReadCmd NewImageStateReadCmd() {
   return ImageStateReadCmd(
-    NewCmdBase()
+    //  TODO: NewCmdBase()
   );
 }
 
@@ -451,7 +452,7 @@ mixin CmdBase {
 
   void Abort() {
     if (this.curSesn != null) {
-        this.curSesn.AbortRx(this.curNmpSeq);
+        //  TODO: this.curSesn.AbortRx(this.curNmpSeq);
     }
     this.abortErr = Exception("Command aborted");
   }
