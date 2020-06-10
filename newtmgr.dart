@@ -158,9 +158,19 @@ typed.Uint8Buffer BodyBytes(  //  Returns []byte
   final data = inst.output.getData();
 
   //  Decode the encoded body and pretty print it
-  inst.decodeFromInput();
-  //  print(inst.decodedPrettyPrint(false));
-  print("Encoded ${ inst.decodedToJSON() } to:\n${ hexDump(data) }");
+  inst.decodeFromInput();  //  print(inst.decodedPrettyPrint(false));
+  final hdr = body.Hdr();
+  print(
+    "Encoded {NmpBase:{hdr:{"
+    "Op:${ hdr.Op } "
+    "Flags:${ hdr.Flags } "
+    "Len:${ hdr.Len } "
+    "Group:${ hdr.Group } "
+    "Seq:${ hdr.Seq } "
+    "Id:${ hdr.Id }}}} "
+    "${ inst.decodedToJSON() } "
+    "to:\n${ hexDump(data) }"
+  );
   return data;
 }
 
