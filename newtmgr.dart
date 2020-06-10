@@ -468,6 +468,34 @@ CmdBase NewCmdBase() {
 }
 
 ////////////////////////////////////////
+//  nmxact/xact/xact.go
+//  Converted from Go: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/xact/xact.go
+
+NmpRsp txReq(
+  Sesn s,     //  Previously sesn.Sesn
+  NmpMsg m,   //  Previously nmp.NmpMsg
+  CmdBase c
+) {  //  Returns nmp.NmpRsp
+	if (c.abortErr != null) {
+		return nil, c.abortErr;
+	}
+
+	c.curNmpSeq = m.Hdr.Seq;
+	c.curSesn = s;
+	defer func() {
+		c.curNmpSeq = 0;
+		c.curSesn = nil;
+	}()
+
+	rsp, err := sesn.TxRxMgmt(s, m, c.TxOptions());
+	if (err != null) {
+		return nil;
+	}
+
+	return rsp;
+}
+
+////////////////////////////////////////
 //  nmxact/nmp/defs.go
 //  Converted from Go: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/nmp/defs.go
 
