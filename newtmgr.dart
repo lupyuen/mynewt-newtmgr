@@ -559,11 +559,15 @@ const
 /// Bluetooth LE Session
 class Sesn {}
 
+Sesn GetSesn() {
+  return Sesn();
+}
+
 /// Bluetooth LE Transmission Options
 class TxOptions {}
 
-Sesn GetSesn() {
-  return Sesn();
+TxOptions NewTxOptions() {
+  return TxOptions();
 }
 
 ////////////////////////////////////////
