@@ -338,11 +338,33 @@ class ImageStateReadReq
 
   NmpMsg Msg() { return MsgFromReq(this); }
 
-  /// TODO: Encode the request fields to CBOR
+  /// Encode the SMP Request fields to CBOR
   void Encode(cbor.Encoder encoder) {
+    // Get our map builder
+    final mapBuilder = cbor.MapBuilder.builder();
+
+    // Add some map entries to the list.
+    // Entries are added as a key followed by a value, this ordering is enforced.
+    // Map keys can be integers or strings only, this is also enforced.
+    // mapBuilder.writeString('a');   // key
+    // mapBuilder.writeURI('a/ur1');  // value
+    // mapBuilder.writeString('b');      // key
+    // mapBuilder.writeEpoch(1234567899);// value
+    // mapBuilder.writeString('c');           // key
+    // mapBuilder.writeDateTime('19/04/2020');// value
+
+    // Get our built map output and add it to the encoding stream.
+    // The key/value pairs must be balanced, i.e. you must end the map building with
+    // a value else the getData method will throw an exception.
+    // Use the addBuilderOutput method to add built output to the encoder.
+    // You can use the addBuilderOutput method on the map builder to add
+    // the output of other list or map builders to its encoding stream.
+    final mapData = mapBuilder.getData();
+    encoder.addBuilderOutput(mapData);
+
     //  encoder.writeArray(<int>[1, 2, 3]);
     //  encoder.writeFloat(67.89);
-    encoder.writeInt(10);
+    //  encoder.writeInt(10);
   }
 }
 
@@ -671,10 +693,10 @@ void testCbor() {
   // Use the addBuilderOutput method to add built output to the encoder.
   // You can use the addBuilderOutput method on the map builder to add
   // the output of other list or map builders to its encoding stream.
-  final mapBuilderOutput = mapBuilder
+  final mapData = mapBuilder
     .getData();
   encoder
-    .addBuilderOutput(mapBuilderOutput);
+    .addBuilderOutput(mapData);
 
   // Add another value
   encoder.writeRegEx('^[12]g');
