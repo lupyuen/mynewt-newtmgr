@@ -313,5 +313,15 @@
 				"label": ""
 			}
 		]
+	},
+	{
+		"path": "$ROOTPATH$/nmxact/xact/cmd.go",
+		"bookmarks": [
+			{
+				"line": 40,
+				"column": 9,
+				"label": ""
+			}
+		]
 	}
 ]
