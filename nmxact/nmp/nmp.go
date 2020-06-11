@@ -128,7 +128,7 @@ func (hdr *NmpHdr) Bytes() []byte {
 
 func BodyBytes(body interface{}) ([]byte, error) {
 	_, task := trace.NewTask(context.Background(), "nmxact/nmp/nmp.go/BodyBytes")
-	time.Sleep(1000 * time.Millisecond) ////
+	time.Sleep(100 * time.Millisecond) ////
 	defer task.End()
 
 	data := make([]byte, 0)

@@ -23,7 +23,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"runtime/trace"
+	//  "runtime/trace"
 	"syscall"
 
 	"mynewt.apache.org/newt/util"
@@ -76,8 +76,8 @@ func cleanup() {
 func main() {
 	// Output tracing messages to stderr:
 	// sudo ./newtmgr image list -c pinetime 2> trace.out
-	trace.Start(os.Stderr)
-	defer trace.Stop()
+	// trace.Start(os.Stderr)
+	// defer trace.Stop()
 
 	nmutil.ToolInfo = nmutil.ToolInfoType{
 		ExeName:       "newtmgr",
