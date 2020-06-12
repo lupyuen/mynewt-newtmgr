@@ -346,7 +346,7 @@ class ImageStateReadReq
   with NmpBase       //  Get and set SMP Message Header
   implements NmpReq  //  SMP Request Message  
 {
-  NmpBase base;  //  Will not be encoded: `codec:"-"`
+  //  NmpBase base;  //  Will not be encoded: `codec:"-"`
 
   NmpMsg Msg() { return MsgFromReq(this); }
 
