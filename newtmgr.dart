@@ -777,4 +777,10 @@ void testCborDecoding() {
 
   // JSON, maps can only have string keys to decode to JSON
   print(inst.decodedToJSON());
+
+  // Print CBOR and JSON sizes
+  print(
+    "CBOR size: ${payload.length} bytes\n"
+    "JSON size: ${inst.decodedToJSON().length} bytes\n"
+  );
 }
