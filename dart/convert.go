@@ -1,4 +1,7 @@
+// Convert Go code to Dart by generating the Abstract Syntax Tree for Go code.
+// Why convert Go to Dart? See this: https://lupyuen.github.io/pinetime-rust-mynewt/articles/companion
 // Based on https://golang.org/src/go/ast/example_test.go
+// and https://zupzup.org/go-ast-traversal/
 package main
 
 import (
@@ -10,13 +13,7 @@ import (
 	"go/token"
 )
 
-func main() {
-	ExampleInspect()
-	ExamplePrint()
-	ExampleCommentMap()
-}
-
-// src is the input for which we want to inspect the AST.
+// src is the input for which we want to generate the Abstract Syntax Tree. "package" is mandatory.
 const src = `
 package dummy_package
 type NmpHdr struct {
@@ -28,6 +25,22 @@ type NmpHdr struct {
 	Id    uint8
 }
 `
+
+// Inspect the Abstract Syntax Tree of our Go code
+func inspectAST() {
+	// Create the AST by parsing src
+	fileset := token.NewFileSet()                            //  Positions are relative to fileset
+	node, err := parser.ParseFile(fileset, "src.go", src, 0) //  Change src to nil to parse a file instead of string
+	if err != nil {
+		panic(err)
+	}
+
+	// Process the declarations
+	fmt.Println("Decls:")
+	for _, decl := range node.Decls {
+		ast.Print(fileset, decl)
+	}
+}
 
 // This example shows what an AST looks like when printed for debugging.
 func ExamplePrint() {
@@ -293,6 +306,13 @@ func ExampleCommentMap() {
 	// func main() {
 	// 	fmt.Println(hello) // line comment 3
 	// }
+}
+
+func main() {
+	inspectAST()
+	ExamplePrint()
+	//  ExampleInspect()
+	//  ExampleCommentMap()
 }
 
 /* Previously:
