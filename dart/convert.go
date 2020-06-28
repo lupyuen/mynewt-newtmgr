@@ -29,48 +29,6 @@ type NmpHdr struct {
 }
 `
 
-// This example demonstrates how to inspect the AST of a Go program.
-func ExampleInspect() {
-	// Create the AST by parsing src.
-	fset := token.NewFileSet() // positions are relative to fset
-	f, err := parser.ParseFile(fset, "src.go", src, 0)
-	if err != nil {
-		panic(err)
-	}
-
-	// Inspect the AST and print all identifiers and literals.
-	ast.Inspect(f, func(n ast.Node) bool {
-		var s string
-		switch x := n.(type) {
-		case *ast.BasicLit:
-			s = x.Value
-		case *ast.Ident:
-			s = x.Name
-		}
-		if s != "" {
-			fmt.Printf("%s:\t%s\n", fset.Position(n.Pos()), s)
-		}
-		return true
-	})
-}
-
-/*
-	src.go:2:9:     dummy_package
-	src.go:3:6:     NmpHdr
-	src.go:4:2:     Op
-	src.go:4:8:     uint8
-	src.go:5:2:     Flags
-	src.go:5:8:     uint8
-	src.go:6:2:     Len
-	src.go:6:8:     uint16
-	src.go:7:2:     Group
-	src.go:7:8:     uint16
-	src.go:8:2:     Seq
-	src.go:8:8:     uint8
-	src.go:9:2:     Id
-	src.go:9:8:     uint8
-*/
-
 // This example shows what an AST looks like when printed for debugging.
 func ExamplePrint() {
 	// Create the AST by parsing src.
@@ -84,7 +42,7 @@ func ExamplePrint() {
 	ast.Print(fset, f)
 }
 
-/*
+/* Output:
      0  *ast.File {
      1  .  Package: 2:1
      2  .  Name: *ast.Ident {
@@ -239,6 +197,48 @@ func ExamplePrint() {
    151  .  .  5: *(obj @ 125)
    152  .  }
    153  }
+*/
+
+// This example demonstrates how to inspect the AST of a Go program.
+func ExampleInspect() {
+	// Create the AST by parsing src.
+	fset := token.NewFileSet() // positions are relative to fset
+	f, err := parser.ParseFile(fset, "src.go", src, 0)
+	if err != nil {
+		panic(err)
+	}
+
+	// Inspect the AST and print all identifiers and literals.
+	ast.Inspect(f, func(n ast.Node) bool {
+		var s string
+		switch x := n.(type) {
+		case *ast.BasicLit:
+			s = x.Value
+		case *ast.Ident:
+			s = x.Name
+		}
+		if s != "" {
+			fmt.Printf("%s:\t%s\n", fset.Position(n.Pos()), s)
+		}
+		return true
+	})
+}
+
+/*
+	src.go:2:9:     dummy_package
+	src.go:3:6:     NmpHdr
+	src.go:4:2:     Op
+	src.go:4:8:     uint8
+	src.go:5:2:     Flags
+	src.go:5:8:     uint8
+	src.go:6:2:     Len
+	src.go:6:8:     uint16
+	src.go:7:2:     Group
+	src.go:7:8:     uint16
+	src.go:8:2:     Seq
+	src.go:8:8:     uint8
+	src.go:9:2:     Id
+	src.go:9:8:     uint8
 */
 
 // This example illustrates how to remove a variable declaration
