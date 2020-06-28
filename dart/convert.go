@@ -55,9 +55,9 @@ func inspectAST() {
 		panic(err)
 	}
 
-	// Process the declarations
+	// Process all declarations
 	for _, decl := range node.Decls {
-		// Process a type declaration
+		// Process a declaration
 		fmt.Println("Decl:")
 		// ast.Print(fileset, decl)
 		switch decl := decl.(type) {
