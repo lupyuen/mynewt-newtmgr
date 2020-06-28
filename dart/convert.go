@@ -59,6 +59,13 @@ func inspectAST() {
 	fmt.Println("Decls:")
 	for _, decl := range node.Decls {
 		ast.Print(fileset, decl)
+		/*
+			switch x := node.(type) {
+			case *ast.GenDecl:
+				ast.Print(fileset, x)
+			}
+		*/
+		// fmt.Printf("%s:\t%s\n", fset.Position(n.Pos()), s)
 	}
 }
 
