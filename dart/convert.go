@@ -26,6 +26,26 @@ type NmpHdr struct {
 }
 `
 
+/* Objective: Convert the above Go code to Dart:
+class NmpHdr {
+  int Op;    //  uint8: 3 bits of opcode
+  int Flags; //  uint8
+  int Len;   //  uint16
+  int Group; //  uint16
+  int Seq;   //  uint8
+  int Id;    //  uint8
+
+  /// Construct an SMP Header
+  NmpHdr(
+    this.Op,    //  uint8: 3 bits of opcode
+    this.Flags, //  uint8
+    this.Len,   //  uint16
+    this.Group, //  uint16
+    this.Seq,   //  uint8
+    this.Id     //  uint8
+  );
+} */
+
 // Inspect the Abstract Syntax Tree of our Go code
 func inspectAST() {
 	// Create the AST by parsing src
