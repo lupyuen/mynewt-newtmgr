@@ -58,6 +58,11 @@
 		"path": "$ROOTPATH$/nmxact/nmp/nmp.go",
 		"bookmarks": [
 			{
+				"line": 37,
+				"column": 5,
+				"label": ""
+			},
+			{
 				"line": 157,
 				"column": 13,
 				"label": ""
