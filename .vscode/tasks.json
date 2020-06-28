@@ -4,13 +4,21 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Run Dart",
+            "label": "Run Convert",
             "type": "shell",
-            "command": "pub get && dart newtmgr.dart",
+            "command": "cd dart && /usr/local/go/bin/go run convert.go",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
+            "presentation": {
+                "clear": true
+            }
+        },
+        {
+            "label": "Run Dart",
+            "type": "shell",
+            "command": "pub get && dart newtmgr.dart",
             "presentation": {
                 "clear": true
             }
