@@ -57,6 +57,7 @@ func inspectAST() {
 
 	// Process the declarations
 	for _, decl := range node.Decls {
+		// Process a type declaration
 		fmt.Println("Decl:")
 		// ast.Print(fileset, decl)
 		switch decl := decl.(type) {
@@ -64,6 +65,7 @@ func inspectAST() {
 			fmt.Printf("Tok: %s\n", decl.Tok) // "type"
 			switch decl.Tok.String() {
 			case "type":
+				// Process a type declaration
 				for _, spec := range decl.Specs {
 					// ast.Print(fileset, spec)
 					switch spec := spec.(type) {
@@ -72,8 +74,10 @@ func inspectAST() {
 						fmt.Printf("typeName: %s\n", typeName)
 						switch structType := spec.Type.(type) {
 						case *ast.StructType: // "struct {"
+							// Process a struct declaration
 							// ast.Print(fileset, structType)
 							for _, field := range structType.Fields.List {
+								// Process a struct field and type
 								// ast.Print(fileset, field)
 								fieldName := field.Names[0].Name // "Op"
 								fieldType := field.Type          // "uint8"
