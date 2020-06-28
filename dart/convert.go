@@ -61,10 +61,33 @@ func inspectAST() {
 		// ast.Print(fileset, decl)
 		switch decl := decl.(type) {
 		case *ast.GenDecl:
-			fmt.Printf("Tok: %s\n", decl.Tok)
+			fmt.Printf("Tok: %s\n", decl.Tok) //  "type"
 			switch decl.Tok.String() {
 			case "type":
-				ast.Print(fileset, decl)
+				for _, spec := range decl.Specs {
+					// ast.Print(fileset, spec)
+					switch spec := spec.(type) {
+					case *ast.TypeSpec:
+						typeName := spec.Name.Name
+						fmt.Printf("typeName: %s\n", typeName) //  "NmpHdr"
+						switch structType := spec.Type.(type) {
+						case *ast.StructType:
+							// ast.Print(fileset, structType)
+							for _, field := range structType.Fields.List {
+								ast.Print(fileset, field)
+							}
+
+						default:
+							fmt.Println("*** Unknown Spec Type:")
+							ast.Print(fileset, spec.Type)
+						}
+
+					default:
+						fmt.Println("*** Unknown Spec:")
+						ast.Print(fileset, spec)
+					}
+				}
+
 			default:
 				fmt.Println("*** Unknown Tok:")
 				ast.Print(fileset, decl.Tok)
