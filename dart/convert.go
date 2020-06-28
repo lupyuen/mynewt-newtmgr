@@ -49,8 +49,8 @@ class NmpHdr {
 // Inspect the Abstract Syntax Tree of our Go code
 func inspectAST() {
 	// Create the AST by parsing src
-	fileset := token.NewFileSet()                            //  Positions are relative to fileset
-	node, err := parser.ParseFile(fileset, "src.go", src, 0) //  Change src to nil to parse a file instead of string
+	fileset := token.NewFileSet()                            // Positions are relative to fileset
+	node, err := parser.ParseFile(fileset, "src.go", src, 0) // Change src to nil to parse a file instead of string
 	if err != nil {
 		panic(err)
 	}
@@ -61,20 +61,23 @@ func inspectAST() {
 		// ast.Print(fileset, decl)
 		switch decl := decl.(type) {
 		case *ast.GenDecl:
-			fmt.Printf("Tok: %s\n", decl.Tok) //  "type"
+			fmt.Printf("Tok: %s\n", decl.Tok) // "type"
 			switch decl.Tok.String() {
 			case "type":
 				for _, spec := range decl.Specs {
 					// ast.Print(fileset, spec)
 					switch spec := spec.(type) {
 					case *ast.TypeSpec:
-						typeName := spec.Name.Name
-						fmt.Printf("typeName: %s\n", typeName) //  "NmpHdr"
+						typeName := spec.Name.Name // "NmpHdr"
+						fmt.Printf("typeName: %s\n", typeName)
 						switch structType := spec.Type.(type) {
-						case *ast.StructType:
+						case *ast.StructType: // "struct {"
 							// ast.Print(fileset, structType)
 							for _, field := range structType.Fields.List {
-								ast.Print(fileset, field)
+								// ast.Print(fileset, field)
+								fieldName := field.Names[0].Name // "Op"
+								fieldType := field.Type          // "uint8"
+								fmt.Printf("field: %s,\ttype: %s\n", fieldName, fieldType)
 							}
 
 						default:
