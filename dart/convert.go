@@ -56,15 +56,24 @@ func inspectAST() {
 	}
 
 	// Process the declarations
-	fmt.Println("Decls:")
 	for _, decl := range node.Decls {
-		ast.Print(fileset, decl)
-		/*
-			switch x := node.(type) {
-			case *ast.GenDecl:
-				ast.Print(fileset, x)
+		fmt.Println("Decl:")
+		// ast.Print(fileset, decl)
+		switch decl := decl.(type) {
+		case *ast.GenDecl:
+			fmt.Printf("Tok: %s\n", decl.Tok)
+			switch decl.Tok.String() {
+			case "type":
+				ast.Print(fileset, decl)
+			default:
+				fmt.Println("*** Unknown Tok:")
+				ast.Print(fileset, decl.Tok)
 			}
-		*/
+
+		default:
+			fmt.Println("*** Unknown Decl:")
+			ast.Print(fileset, decl)
+		}
 		// fmt.Printf("%s:\t%s\n", fset.Position(n.Pos()), s)
 	}
 }
