@@ -15,7 +15,7 @@ import (
 
 // src is the input for which we want to generate the Abstract Syntax Tree. "package" is mandatory.
 const src = `
-package dummy_package
+package main
 type NmpHdr struct {
 	Op    uint8 /* 3 bits of opcode */
 	Flags uint8
@@ -48,6 +48,9 @@ class NmpHdr {
 
 // Inspect the Abstract Syntax Tree of our Go code
 func inspectAST() {
+	fmt.Printf("//  Convert Go Code...%s\n", src)
+	fmt.Println("//  To Dart...")
+
 	// Create the AST by parsing src
 	fileset := token.NewFileSet()                            // Positions are relative to fileset
 	node, err := parser.ParseFile(fileset, "src.go", src, 0) // Change src to nil to parse a file instead of string
@@ -58,11 +61,11 @@ func inspectAST() {
 	// Process all declarations
 	for _, decl := range node.Decls {
 		// Process a declaration
-		fmt.Println("Decl:")
+		// fmt.Println("Decl:")
 		// ast.Print(fileset, decl)
 		switch decl := decl.(type) {
 		case *ast.GenDecl:
-			fmt.Printf("Tok: %s\n", decl.Tok) // "type"
+			// fmt.Printf("Tok: %s\n", decl.Tok) // "type"
 			switch decl.Tok.String() {
 			case "type":
 				// Process a type declaration
@@ -71,7 +74,8 @@ func inspectAST() {
 					switch spec := spec.(type) {
 					case *ast.TypeSpec:
 						typeName := spec.Name.Name // "NmpHdr"
-						fmt.Printf("typeName: %s\n", typeName)
+						// fmt.Printf("typeName: %s\n", typeName)
+						fmt.Printf("class %s {\n", typeName)
 						switch structType := spec.Type.(type) {
 						case *ast.StructType: // "struct {"
 							// Process a struct declaration
@@ -79,9 +83,11 @@ func inspectAST() {
 							for _, field := range structType.Fields.List {
 								// Process a struct field and type
 								// ast.Print(fileset, field)
-								fieldName := field.Names[0].Name // "Op"
-								fieldType := field.Type          // "uint8"
-								fmt.Printf("field: %s,\ttype: %s\n", fieldName, fieldType)
+								fieldName := field.Names[0].Name                      // "Op"
+								fieldType := field.Type                               // "uint8"
+								dartType := convertType(fmt.Sprintf("%s", fieldType)) // "int"
+								// fmt.Printf("field: %s,\ttype: %s\n", fieldName, fieldType)
+								fmt.Printf("  %s %s;\t//  %s\n", dartType, fieldName, fieldType)
 							}
 
 						default:
@@ -94,6 +100,7 @@ func inspectAST() {
 						ast.Print(fileset, spec)
 					}
 				}
+				fmt.Println("}")
 
 			default:
 				fmt.Println("*** Unknown Tok:")
@@ -105,6 +112,18 @@ func inspectAST() {
 			ast.Print(fileset, decl)
 		}
 		// fmt.Printf("%s:\t%s\n", fset.Position(n.Pos()), s)
+	}
+}
+
+// Convert Go type to Dart type
+func convertType(typeName string) string {
+	switch typeName {
+	case "uint8":
+		return "int"
+	case "uint16":
+		return "int"
+	default:
+		return "Unknown"
 	}
 }
 
@@ -376,9 +395,9 @@ func ExampleCommentMap() {
 
 func main() {
 	inspectAST()
-	ExamplePrint()
-	//  ExampleInspect()
-	//  ExampleCommentMap()
+	// ExamplePrint()
+	// ExampleInspect()
+	// ExampleCommentMap()
 }
 
 /* Previously:
