@@ -22,7 +22,6 @@ package xact
 import (
 	"context"
 	"runtime/trace"
-	"time"
 
 	"mynewt.apache.org/newtmgr/nmxact/nmp"
 	"mynewt.apache.org/newtmgr/nmxact/sesn"
@@ -31,7 +30,7 @@ import (
 func txReq(s sesn.Sesn, m *nmp.NmpMsg, c *CmdBase) (
 	nmp.NmpRsp, error) {
 	_, task := trace.NewTask(context.Background(), "nmxact/xact/xact.go/txReq")
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 	defer task.End()
 
 	if c.abortErr != nil {

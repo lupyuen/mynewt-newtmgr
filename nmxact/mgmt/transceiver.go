@@ -54,7 +54,7 @@ type Transceiver struct {
 
 func NewTransceiver(txFilterCb, rxFilterCb nmcoap.MsgFilter, isTcp bool,
 	mgmtProto sesn.MgmtProto, logDepth int) (*Transceiver, error) {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 
 	t := &Transceiver{
 		txFilterCb: txFilterCb,
@@ -77,7 +77,7 @@ func NewTransceiver(txFilterCb, rxFilterCb nmcoap.MsgFilter, isTcp bool,
 
 func (t *Transceiver) txRxNmp(txCb TxFn, req *nmp.NmpMsg, mtu int,
 	timeout time.Duration) (nmp.NmpRsp, error) {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 
 	nl, err := t.nd.AddListener(req.Hdr.Seq)
 	if err != nil {
@@ -118,7 +118,7 @@ func (t *Transceiver) txRxNmp(txCb TxFn, req *nmp.NmpMsg, mtu int,
 
 func (t *Transceiver) txRxOmp(txCb TxFn, req *nmp.NmpMsg, mtu int,
 	timeout time.Duration) (nmp.NmpRsp, error) {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 
 	nl, err := t.od.AddNmpListener(req.Hdr.Seq)
 	if err != nil {
@@ -165,7 +165,7 @@ func (t *Transceiver) txRxOmp(txCb TxFn, req *nmp.NmpMsg, mtu int,
 
 func (t *Transceiver) TxRxMgmt(txCb TxFn, req *nmp.NmpMsg, mtu int,
 	timeout time.Duration) (nmp.NmpRsp, error) {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 
 	if t.nd != nil {
 		return t.txRxNmp(txCb, req, mtu, timeout)
@@ -175,7 +175,7 @@ func (t *Transceiver) TxRxMgmt(txCb TxFn, req *nmp.NmpMsg, mtu int,
 }
 
 func (t *Transceiver) TxCoap(txCb TxFn, req coap.Message, mtu int) error {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 	b, err := nmcoap.Encode(req)
 	if err != nil {
 		return err
@@ -194,7 +194,7 @@ func (t *Transceiver) TxCoap(txCb TxFn, req coap.Message, mtu int) error {
 
 func (t *Transceiver) ListenCoap(
 	mc nmcoap.MsgCriteria) (*nmcoap.Listener, error) {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 
 	mc.Path = strings.TrimPrefix(mc.Path, "/")
 
@@ -207,13 +207,13 @@ func (t *Transceiver) ListenCoap(
 }
 
 func (t *Transceiver) StopListenCoap(mc nmcoap.MsgCriteria) {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 	mc.Path = strings.TrimPrefix(mc.Path, "/")
 	t.od.RemoveCoapListener(mc)
 }
 
 func (t *Transceiver) DispatchNmpRsp(data []byte) {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 	if t.nd != nil {
 		log.Debugf("rx nmp response: %s", hex.Dump(data))
 		t.nd.Dispatch(data)
@@ -224,17 +224,17 @@ func (t *Transceiver) DispatchNmpRsp(data []byte) {
 }
 
 func (t *Transceiver) DispatchCoap(data []byte) {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 	t.od.Dispatch(data)
 }
 
 func (t *Transceiver) ProcessCoapReq(data []byte) (coap.Message, error) {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 	return t.od.ProcessCoapReq(data)
 }
 
 func (t *Transceiver) ErrorOne(seq uint8, err error) {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 	if t.nd != nil {
 		t.nd.ErrorOne(seq, err)
 	} else {
@@ -243,7 +243,7 @@ func (t *Transceiver) ErrorOne(seq uint8, err error) {
 }
 
 func (t *Transceiver) ErrorAll(err error) {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 	if t.nd != nil {
 		t.nd.ErrorAll(err)
 	}
@@ -251,12 +251,12 @@ func (t *Transceiver) ErrorAll(err error) {
 }
 
 func (t *Transceiver) AbortRx(seq uint8) {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 	t.ErrorOne(seq, fmt.Errorf("rx aborted"))
 }
 
 func (t *Transceiver) Stop() {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 	t.od.Stop()
 }
 
@@ -270,7 +270,7 @@ func (t *Transceiver) Filters() (nmcoap.MsgFilter, nmcoap.MsgFilter) {
 
 func (t *Transceiver) SetFilters(txFilter nmcoap.MsgFilter,
 	rxFilter nmcoap.MsgFilter) {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 
 	t.txFilterCb = txFilter
 	t.od.SetRxFilter(rxFilter)

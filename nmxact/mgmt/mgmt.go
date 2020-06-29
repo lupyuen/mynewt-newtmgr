@@ -21,7 +21,6 @@ package mgmt
 
 import (
 	"fmt"
-	"time"
 
 	"mynewt.apache.org/newtmgr/nmxact/nmp"
 	"mynewt.apache.org/newtmgr/nmxact/omp"
@@ -29,7 +28,7 @@ import (
 )
 
 func EncodeMgmt(s sesn.Sesn, m *nmp.NmpMsg) ([]byte, error) {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 	switch s.MgmtProto() {
 	case sesn.MGMT_PROTO_NMP:
 		return nmp.EncodeNmpPlain(m)

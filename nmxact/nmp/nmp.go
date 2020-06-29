@@ -25,7 +25,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"runtime/trace"
-	"time"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/ugorji/go/codec"
@@ -88,7 +87,7 @@ func NewNmpMsg() *NmpMsg {
 }
 
 func DecodeNmpHdr(data []byte) (*NmpHdr, error) {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 	if len(data) < NMP_HDR_SIZE {
 		return nil, fmt.Errorf(
 			"Newtmgr request buffer too small %d bytes", len(data))
@@ -107,7 +106,7 @@ func DecodeNmpHdr(data []byte) (*NmpHdr, error) {
 }
 
 func (hdr *NmpHdr) Bytes() []byte {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 	buf := make([]byte, 0, NMP_HDR_SIZE)
 
 	buf = append(buf, byte(hdr.Op))
@@ -128,7 +127,7 @@ func (hdr *NmpHdr) Bytes() []byte {
 
 func BodyBytes(body interface{}) ([]byte, error) {
 	_, task := trace.NewTask(context.Background(), "nmxact/nmp/nmp.go/BodyBytes")
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 	defer task.End()
 
 	data := make([]byte, 0)
@@ -144,7 +143,7 @@ func BodyBytes(body interface{}) ([]byte, error) {
 }
 
 func EncodeNmpPlain(nmr *NmpMsg) ([]byte, error) {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 	bb, err := BodyBytes(nmr.Body)
 	if err != nil {
 		return nil, err
@@ -161,7 +160,7 @@ func EncodeNmpPlain(nmr *NmpMsg) ([]byte, error) {
 }
 
 func fillNmpReqWithSeq(req NmpReq, op uint8, group uint16, id uint8, seq uint8) {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 	hdr := NmpHdr{
 		Op:    op,
 		Flags: 0,
@@ -175,6 +174,6 @@ func fillNmpReqWithSeq(req NmpReq, op uint8, group uint16, id uint8, seq uint8) 
 }
 
 func fillNmpReq(req NmpReq, op uint8, group uint16, id uint8) {
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 	fillNmpReqWithSeq(req, op, group, id, nmxutil.NextNmpSeq())
 }

@@ -27,7 +27,6 @@ import (
 	"os"
 	"runtime/trace"
 	"strings"
-	"time"
 
 	"github.com/spf13/cobra"
 	pb "gopkg.in/cheggaaa/pb.v1"
@@ -93,7 +92,7 @@ func imageStatePrintRsp(rsp *nmp.ImageStateRsp) error {
 
 func imageStateListCmd(cmd *cobra.Command, args []string) {
 	_, task := trace.NewTask(context.Background(), "newtmgr/cli/image.go/imageStateListCmd")
-	time.Sleep(100 * time.Millisecond) ////
+	//// time.Sleep(100 * time.Millisecond) ////
 	defer task.End()
 
 	s, err := GetSesn()
