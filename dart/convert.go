@@ -64,8 +64,8 @@ class ImageUploadReq
 
 // Inspect the Abstract Syntax Tree of our Go code and convert to Dart
 func convertGoToDart() {
-	fmt.Printf("//  Convert Go Code...%s\n", src)
-	fmt.Println("//  To Dart...")
+	fmt.Printf("//  Go Code...%s\n", src)
+	fmt.Println("//  Converted To Dart...")
 
 	// Create the AST by parsing src
 	fileset := token.NewFileSet()                            // Positions are relative to fileset
@@ -94,7 +94,9 @@ func convertGoToDart() {
 						fmt.Printf("class %s ", typeName)
 						// Handle request messages
 						if strings.HasSuffix(typeName, "Req") {
-							fmt.Println("\n  with NmpBase       //  Get and set SMP Message Header\n  implements NmpReq  //  SMP Request Message")
+							fmt.Println("")
+							fmt.Println("  with NmpBase       //  Get and set SMP Message Header")
+							fmt.Println("  implements NmpReq  //  SMP Request Message")
 						}
 						fmt.Println("{")
 
@@ -139,12 +141,13 @@ func convertGoToDart() {
 	}
 }
 
-// DartField represents a Go Struct Field converted to Dart
+// DartField represents a Go Struct Field converted to Dart and CBOR
 type DartField struct {
-	Name     string // "Op"
-	CborName string
-	GoType   string // "uint8"
+	Name     string // "Len"
+	CborName string // "len"
+	GoType   string // "uint32"
 	DartType string // "int"
+	CborType string // "Int"
 }
 
 // Generate the CBOR Encoder function
@@ -152,13 +155,11 @@ func generateCborEncoder(astFields []*ast.Field) {
 	fmt.Println("  /// Encode the SMP Request fields to CBOR")
 	fmt.Println("  void Encode(cbor.MapBuilder builder) {")
 	for _, field := range astFields {
-		// Process a struct field and type
 		// ast.Print(fileset, field)
 		dartField := convertField(field)
 		if dartField.CborName != "-" {
 			fmt.Printf("    builder.writeString(\"%s\");\n", dartField.CborName)
-			// TODO: Handle type
-			fmt.Printf("    builder.writeString(%s);\n", dartField.Name)
+			fmt.Printf("    builder.write%s(%s);\n", dartField.CborType, dartField.Name)
 		}
 	}
 	fmt.Println("  }")
@@ -167,7 +168,6 @@ func generateCborEncoder(astFields []*ast.Field) {
 // Convert Go Struct Fields to Dart
 func convertFields(astFields []*ast.Field) {
 	for _, field := range astFields {
-		// Process a struct field and type
 		// ast.Print(fileset, field)
 		dartField := convertField(field)
 		if dartField.Name != "" {
@@ -180,14 +180,14 @@ func convertFields(astFields []*ast.Field) {
 func convertField(astField *ast.Field) DartField {
 	dartField := DartField{}
 	if len(astField.Names) > 0 {
-		dartField.Name = astField.Names[0].Name // "Op"
+		dartField.Name = astField.Names[0].Name // "Len"
 	}
-	dartField.GoType = fmt.Sprintf("%v", astField.Type) // "uint8"
+	dartField.GoType = fmt.Sprintf("%v", astField.Type) // "uint32"
 	// Handle "&{181 <nil> byte}" as "[]byte"
 	if strings.HasPrefix(dartField.GoType, "&{") && strings.HasSuffix(dartField.GoType, " byte}") {
 		dartField.GoType = "[]byte"
 	}
-	dartField.DartType = convertType(fmt.Sprintf("%s", dartField.GoType)) // "int"
+	dartField.DartType, dartField.CborType = convertType(fmt.Sprintf("%s", dartField.GoType)) // "int"
 
 	// Convert a Field Tag like `codec:"len,omitempty"`. CborName will be set to "len".
 	if astField.Tag != nil {
@@ -200,21 +200,21 @@ func convertField(astField *ast.Field) DartField {
 	return dartField
 }
 
-// Convert Go type to Dart type
-func convertType(typeName string) string {
+// Convert Go type to Dart type and CBOR type
+func convertType(typeName string) (string, string) {
 	switch typeName {
 	case "bool":
-		return "bool"
+		return "bool", "Bool"
 	case "uint8":
-		return "int"
+		return "int", "Int"
 	case "uint16":
-		return "int"
+		return "int", "Int"
 	case "uint32":
-		return "int"
+		return "int", "Int"
 	case "[]byte":
-		return "typed.Uint8Buffer"
+		return "typed.Uint8Buffer", "Array"
 	default:
-		return "Unknown"
+		return "UNKNOWN", "UNKNOWN"
 	}
 }
 
@@ -264,10 +264,10 @@ func ExamplePrint() {
     29  .  .  .  .  .  .  .  .  .  Names: []*ast.Ident (len = 1) {
     30  .  .  .  .  .  .  .  .  .  .  0: *ast.Ident {
     31  .  .  .  .  .  .  .  .  .  .  .  NamePos: 4:2
-    32  .  .  .  .  .  .  .  .  .  .  .  Name: "Op"
+    32  .  .  .  .  .  .  .  .  .  .  .  Name: "Len"
     33  .  .  .  .  .  .  .  .  .  .  .  Obj: *ast.Object {
     34  .  .  .  .  .  .  .  .  .  .  .  .  Kind: var
-    35  .  .  .  .  .  .  .  .  .  .  .  .  Name: "Op"
+    35  .  .  .  .  .  .  .  .  .  .  .  .  Name: "Len"
     36  .  .  .  .  .  .  .  .  .  .  .  .  Decl: *(obj @ 28)
     37  .  .  .  .  .  .  .  .  .  .  .  }
     38  .  .  .  .  .  .  .  .  .  .  }
