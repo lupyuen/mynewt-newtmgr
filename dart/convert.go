@@ -131,26 +131,35 @@ func convertField(astField *ast.Field) DartField {
 	if len(astField.Names) > 0 {
 		dartField.Name = astField.Names[0].Name // "Op"
 	}
-	dartField.GoType = fmt.Sprintf("%s", astField.Type)                   // "uint8"
+	dartField.GoType = fmt.Sprintf("%v", astField.Type) // "uint8"
+	// Handle "&{181 <nil> byte}" as "[]byte"
+	if strings.HasPrefix(dartField.GoType, "&{") && strings.HasSuffix(dartField.GoType, " byte}") {
+		dartField.GoType = "[]byte"
+	}
 	dartField.DartType = convertType(fmt.Sprintf("%s", dartField.GoType)) // "int"
 
 	// Convert a Field Tag like `codec:"len,omitempty"`. CborName will be set to "len".
 	if astField.Tag != nil {
-		dartField.CborName = strings.Replace(strings.Split(astField.Tag.Value, ",")[0], "codec:", "", 1)
+		dartField.CborName = strings.Split(astField.Tag.Value, ",")[0]
+		dartField.CborName = strings.Replace(dartField.CborName, "codec:", "", 1)
 		dartField.CborName = strings.Replace(dartField.CborName, `"`, "", 2)
 		dartField.CborName = strings.Replace(dartField.CborName, "`", "", 2)
 	}
-	fmt.Printf("field: %s,\tcbor: %s,\ttype: %s\n", dartField.Name, dartField.CborName, dartField.GoType)
+	fmt.Printf("field: %s,\tcbor: %s,\ttype: %s,\tdart: %s\n", dartField.Name, dartField.CborName, dartField.GoType, dartField.DartType)
 	return dartField
 }
 
 // Convert Go type to Dart type
 func convertType(typeName string) string {
 	switch typeName {
+	case "bool":
+		return "bool"
 	case "uint8":
 		return "int"
 	case "uint16":
 		return "int"
+	case "[]byte":
+		return "typed.Uint8Buffer"
 	default:
 		return "Unknown"
 	}
