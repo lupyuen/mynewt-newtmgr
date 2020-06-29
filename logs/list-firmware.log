@@ -1,0 +1,50 @@
+time="2020-06-29 08:58:36.642" level=debug msg="Using connection profile: name=pinetime type=ble connstring=peer_name=pinetime"
+time="2020-06-29 08:58:36.65" level=debug msg="CentralManagerDidUpdateState: cmgr=0xc504370"
+time="2020-06-29 08:58:36.753" level=debug msg="PeripheralManagerDidUpdateState: pmgr=0xc50e5b0"
+time="2020-06-29 08:58:36.771" level=debug msg="Connecting to peer"
+time="2020-06-29 08:58:36.809" level=debug msg="CentralManagerDidDiscoverPeripheral: cmgr=0xc504370 prph=0xc7051c0 af={LocalName:pinetime ManufacturerData:[] TxPowerLevel:0xc0001371f8 Connectable:0xc000137200 ServiceUUIDs:[1811] ServiceData:[]} rssi=-55"
+time="2020-06-29 08:58:37.251" level=debug msg="CentralManagerDidConnectPeripheral: cmgr=0xc504370 prph=0xc7051c0"
+time="2020-06-29 08:58:37.253" level=debug msg="Exchanging MTU"
+time="2020-06-29 08:58:37.253" level=debug msg="Exchanged MTU; ATT MTU = 98"
+time="2020-06-29 08:58:37.253" level=debug msg="Discovering profile"
+time="2020-06-29 08:58:37.683" level=debug msg="PeripheralDidDiscoverServices: prph=0xc7051c0 err=<nil>"
+time="2020-06-29 08:58:37.76" level=debug msg="PeripheralDidDiscoverCharacteristics: prph=0xc7051c0 svc=0xc511070 err=<nil>"
+time="2020-06-29 08:58:37.761" level=debug msg="PeripheralDidDiscoverDescriptors: prph=0xc7051c0 chr=0xd004180 err=<nil>"
+time="2020-06-29 08:58:37.849" level=debug msg="PeripheralDidDiscoverDescriptors: prph=0xc7051c0 chr=0xd0042d0 err=<nil>"
+time="2020-06-29 08:58:37.85" level=debug msg="PeripheralDidDiscoverDescriptors: prph=0xc7051c0 chr=0xd004420 err=<nil>"
+time="2020-06-29 08:58:37.91" level=debug msg="PeripheralDidDiscoverDescriptors: prph=0xc7051c0 chr=0xd0044c0 err=<nil>"
+time="2020-06-29 08:58:37.91" level=debug msg="PeripheralDidDiscoverDescriptors: prph=0xc7051c0 chr=0xc5119d0 err=<nil>"
+time="2020-06-29 08:58:37.94" level=debug msg="PeripheralDidDiscoverCharacteristics: prph=0xc7051c0 svc=0xc511180 err=<nil>"
+time="2020-06-29 08:58:37.94" level=debug msg="PeripheralDidDiscoverDescriptors: prph=0xc7051c0 chr=0xd107ee0 err=<nil>"
+time="2020-06-29 08:58:37.941" level=debug msg="PeripheralDidDiscoverDescriptors: prph=0xc7051c0 chr=0xd107f50 err=<nil>"
+time="2020-06-29 08:58:37.97" level=debug msg="PeripheralDidDiscoverCharacteristics: prph=0xc7051c0 svc=0xc511460 err=<nil>"
+time="2020-06-29 08:58:37.999" level=debug msg="PeripheralDidDiscoverDescriptors: prph=0xc7051c0 chr=0xc7041c0 err=<nil>"
+time="2020-06-29 08:58:38.059" level=debug msg="PeripheralDidDiscoverCharacteristics: prph=0xc7051c0 svc=0xc5114e0 err=<nil>"
+time="2020-06-29 08:58:38.06" level=debug msg="PeripheralDidDiscoverDescriptors: prph=0xc7051c0 chr=0xc704510 err=<nil>"
+time="2020-06-29 08:58:38.09" level=debug msg="PeripheralDidDiscoverDescriptors: prph=0xc7051c0 chr=0xc704570 err=<nil>"
+time="2020-06-29 08:58:38.092" level=debug msg="Subscribing to NMP response characteristic"
+time="2020-06-29 08:58:38.119" level=debug msg="PeripheralDidUpdateNotificationState: prph=0xc7051c0 chr=0xc7041c0 err=<nil>"
+time="2020-06-29 08:58:38.12" level=debug msg="{add-nmp-listener} [bll_sesn.go:415] seq=66"
+time="2020-06-29 08:58:38.124" level=debug msg="Encoded &{NmpBase:{hdr:{Op:0 Flags:0 Len:0 Group:1 Seq:66 Id:0}}} to:\n00000000  a0                                                |.|\n"
+time="2020-06-29 08:58:38.124" level=debug msg="Encoded:\n00000000  00 00 00 01 00 01 42 00  a0                       |......B..|\n"
+time="2020-06-29 08:58:38.124" level=debug msg="Tx NMP request: 00000000  00 00 00 01 00 01 42 00  a0                       |......B..|\n"
+time="2020-06-29 08:58:38.152" level=debug msg="PeripheralDidUpdateValueForCharacteristic: prph=0xc7051c0 chr=0xc7041c0 err=<nil>"
+time="2020-06-29 08:58:38.152" level=debug msg="rx nmp response: 00000000  01 00 00 f4 00 01 42 00  bf 66 69 6d 61 67 65 73  |......B..fimages|\n00000010  9f bf 64 73 6c 6f 74 00  67 76 65 72 73 69 6f 6e  |..dslot.gversion|\n00000020  65 31 2e 30 2e 30 64 68  61 73 68 58 20 ea bc 3a  |e1.0.0dhashX ..:|\n00000030  ce 74 a8 28 4c 6f 78 c2  bc ad 3a e1 8d 39 26 75  |.t.(Lox...:..9&u|\n00000040  c7 66 c5 1f 95 23 0f 13  39 3f 08 1c 5d 68 62 6f  |.f...#..9?..]hbo|\n00000050  6f 74 61 62 6c 65 f5 67  70 65 6e 64 69 6e 67 f4  |otable.gpending.|\n00000060  69 63 6f 6e 66                                    |iconf|\n"
+time="2020-06-29 08:58:38.166" level=debug msg="PeripheralDidUpdateValueForCharacteristic: prph=0xc7051c0 chr=0xc7041c0 err=<nil>"
+time="2020-06-29 08:58:38.167" level=debug msg="rx nmp response: 00000000  69 72 6d 65 64 f5 66 61  63 74 69 76 65 f5 69 70  |irmed.factive.ip|\n00000010  65 72 6d 61 6e 65 6e 74  f4 ff bf 64 73 6c 6f 74  |ermanent...dslot|\n00000020  01 67 76 65 72 73 69 6f  6e 65 31 2e 31 2e 30 64  |.gversione1.1.0d|\n00000030  68 61 73 68 58 20 66 a2  3f 4f 8f 57 66 b5 15 07  |hashX f.?O.Wf...|\n00000040  11 eb 8c 7c 4b e3 26 ce  ba be f3 74 29 fd 21 87  |...|K.&....t).!.|\n00000050  9f 6e 0e ac ff e5 68 62  6f 6f 74 61 62 6c 65 f5  |.n....hbootable.|\n00000060  67 70 65 6e 64                                    |gpend|\n"
+time="2020-06-29 08:58:38.181" level=debug msg="PeripheralDidUpdateValueForCharacteristic: prph=0xc7051c0 chr=0xc7041c0 err=<nil>"
+time="2020-06-29 08:58:38.181" level=debug msg="rx nmp response: 00000000  69 6e 67 f4 69 63 6f 6e  66 69 72 6d 65 64 f4 66  |ing.iconfirmed.f|\n00000010  61 63 74 69 76 65 f4 69  70 65 72 6d 61 6e 65 6e  |active.ipermanen|\n00000020  74 f4 ff ff 6b 73 70 6c  69 74 53 74 61 74 75 73  |t...ksplitStatus|\n00000030  00 ff                                             |..|\n"
+time="2020-06-29 08:58:38.182" level=debug msg="Received nmp rsp: &{NmpBase:{hdr:{Op:1 Flags:0 Len:244 Group:1 Seq:66 Id:0}} Rc:0 Images:[{NmpBase:{hdr:{Op:0 Flags:0 Len:0 Group:0 Seq:0 Id:0}} Image:0 Slot:0 Version:1.0.0 Hash:[234 188 58 206 116 168 40 76 111 120 194 188 173 58 225 141 57 38 117 199 102 197 31 149 35 15 19 57 63 8 28 93] Bootable:true Pending:false Confirmed:true Active:true Permanent:false} {NmpBase:{hdr:{Op:0 Flags:0 Len:0 Group:0 Seq:0 Id:0}} Image:0 Slot:1 Version:1.1.0 Hash:[102 162 63 79 143 87 102 181 21 7 17 235 140 124 75 227 38 206 186 190 243 116 41 253 33 135 159 110 14 172 255 229] Bootable:true Pending:false Confirmed:false Active:false Permanent:false}] SplitStatus:N/A}"
+time="2020-06-29 08:58:38.182" level=debug msg="{remove-nmp-listener} [bll_sesn.go:415] seq=66"
+Images:
+ image=0 slot=0
+    version: 1.0.0
+    bootable: true
+    flags: active confirmed
+    hash: eabc3ace74a8284c6f78c2bcad3ae18d392675c766c51f95230f13393f081c5d
+ image=0 slot=1
+    version: 1.1.0
+    bootable: true
+    flags: 
+    hash: 66a23f4f8f5766b5150711eb8c7c4be326cebabef37429fd21879f6e0eacffe5
+Split status: N/A (0)
