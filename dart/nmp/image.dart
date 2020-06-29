@@ -24,6 +24,11 @@ import 'nmp.dart';
 //  nmxact/nmp/image.go
 //  Converted from Go: https://github.com/lupyuen/mynewt-newtmgr/blob/master/nmxact/nmp/image.go
 
+// TODO
+//////////////////////////////////////////////////////////////////////////////
+// $upload                                                                  //
+//////////////////////////////////////////////////////////////////////////////
+
 //////////////////////////////////////////////////////////////////////////////
 // $state                                                                   //
 //////////////////////////////////////////////////////////////////////////////
@@ -79,23 +84,19 @@ class ImageStateReadReq
     // Add some map entries to the list.
     // Entries are added as a key followed by a value, this ordering is enforced.
     // Map keys can be integers or strings only, this is also enforced.
-    // mapBuilder.writeString('a');   // key
-    // mapBuilder.writeURI('a/ur1');  // value
-    // mapBuilder.writeString('b');      // key
-    // mapBuilder.writeEpoch(1234567899);// value
-    // mapBuilder.writeString('c');           // key
-    // mapBuilder.writeDateTime('19/04/2020');// value
+    // builder.writeString('a');   // key
+    // builder.writeURI('a/ur1');  // value
+    // builder.writeString('b');      // key
+    // builder.writeEpoch(1234567899);// value
+    // builder.writeString('c');           // key
+    // builder.writeDateTime('19/04/2020');// value
 
-    // Get our built map output and add it to the encoding stream.
     // The key/value pairs must be balanced, i.e. you must end the map building with
     // a value else the getData method will throw an exception.
-    // Use the addBuilderOutput method to add built output to the encoder.
-    // You can use the addBuilderOutput method on the map builder to add
-    // the output of other list or map builders to its encoding stream.
 
-    //  encoder.writeArray(<int>[1, 2, 3]);
-    //  encoder.writeFloat(67.89);
-    //  encoder.writeInt(10);
+    // builder.writeArray(<int>[1, 2, 3]);
+    // builder.writeFloat(67.89);
+    // builder.writeInt(10);
   }
 }
 
@@ -113,6 +114,20 @@ class ImageStateReadReq
     SplitStatus SplitStatus       `codec:"splitStatus"`
   }
 */
+
+/// TODO: Check response from PineTime
+class ImageStateRsp 
+  implements NmpRsp
+{
+  //  TODO
+  int Rc;
+  //  TODO
+  NmpHdr Hdr() { return NmpHdr(0, 0, 0, 0, 0, 0); }
+  //  TODO
+  NmpMsg Msg() { return NmpMsg(null, null); }
+  //  TODO
+  void SetHdr(NmpHdr msg) {}
+}
 
 ImageStateReadReq NewImageStateReadReq() {
   var r = ImageStateReadReq();
@@ -136,18 +151,22 @@ ImageStateReadReq NewImageStateReadReq() {
   func (r *ImageStateRsp) Msg() *NmpMsg { return MsgFromReq(r) }
 */
 
-////////////////////////////////////////
-//  TODO: Check response from PineTime
+// TODO
+//////////////////////////////////////////////////////////////////////////////
+// $corelist                                                                //
+//////////////////////////////////////////////////////////////////////////////
 
-class ImageStateRsp 
-  implements NmpRsp
-{
-  //  TODO
-  int Rc;
-  //  TODO
-  NmpHdr Hdr() { return NmpHdr(0, 0, 0, 0, 0, 0); }
-  //  TODO
-  NmpMsg Msg() { return NmpMsg(null, null); }
-  //  TODO
-  void SetHdr(NmpHdr msg) {}
-}
+// TODO
+//////////////////////////////////////////////////////////////////////////////
+// $coreload                                                                //
+//////////////////////////////////////////////////////////////////////////////
+
+// TODO
+//////////////////////////////////////////////////////////////////////////////
+// $coreerase                                                               //
+//////////////////////////////////////////////////////////////////////////////
+
+// TODO
+//////////////////////////////////////////////////////////////////////////////
+// $erase                                                                   //
+//////////////////////////////////////////////////////////////////////////////
