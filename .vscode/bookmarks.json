@@ -78,6 +78,41 @@
 				"label": ""
 			},
 			{
+				"line": 288,
+				"column": 29,
+				"label": ""
+			},
+			{
+				"line": 289,
+				"column": 14,
+				"label": ""
+			},
+			{
+				"line": 306,
+				"column": 29,
+				"label": ""
+			},
+			{
+				"line": 316,
+				"column": 17,
+				"label": ""
+			},
+			{
+				"line": 338,
+				"column": 27,
+				"label": ""
+			},
+			{
+				"line": 343,
+				"column": 20,
+				"label": ""
+			},
+			{
+				"line": 350,
+				"column": 20,
+				"label": ""
+			},
+			{
 				"line": 373,
 				"column": 14,
 				"label": ""
@@ -98,8 +133,13 @@
 		"path": "$ROOTPATH$/nmxact/nmp/image.go",
 		"bookmarks": [
 			{
-				"line": 49,
-				"column": 7,
+				"line": 53,
+				"column": 16,
+				"label": ""
+			},
+			{
+				"line": 56,
+				"column": 8,
 				"label": ""
 			},
 			{
