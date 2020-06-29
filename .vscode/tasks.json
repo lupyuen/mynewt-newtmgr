@@ -18,7 +18,7 @@
         {
             "label": "Run Dart",
             "type": "shell",
-            "command": "pub get && dart newtmgr.dart",
+            "command": "cd dart && pub get && dart newtmgr.dart",
             "presentation": {
                 "clear": true
             }
