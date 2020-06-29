@@ -53,6 +53,11 @@
 				"label": ""
 			},
 			{
+				"line": 76,
+				"column": 24,
+				"label": ""
+			},
+			{
 				"line": 97,
 				"column": 16,
 				"label": ""
@@ -188,6 +193,11 @@
 		"path": "$ROOTPATH$/nmxact/nmp/image.go",
 		"bookmarks": [
 			{
+				"line": 30,
+				"column": 12,
+				"label": ""
+			},
+			{
 				"line": 53,
 				"column": 16,
 				"label": ""
@@ -225,6 +235,16 @@
 			{
 				"line": 228,
 				"column": 7,
+				"label": ""
+			},
+			{
+				"line": 244,
+				"column": 10,
+				"label": ""
+			},
+			{
+				"line": 253,
+				"column": 13,
 				"label": ""
 			},
 			{
