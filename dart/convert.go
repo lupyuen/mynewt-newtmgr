@@ -11,6 +11,7 @@ import (
 	"go/format"
 	"go/parser"
 	"go/token"
+	"strings"
 )
 
 // src is the input for which we want to generate the Abstract Syntax Tree. "package" is mandatory.
@@ -88,7 +89,7 @@ func inspectAST() {
 								// Process a struct field and type
 								ast.Print(fileset, field)
 								dartField := convertField(field)
-								fmt.Printf("  %s %s;\t//  %s\n", dartField.DartType, dartField.FieldName, dartField.FieldType)
+								fmt.Printf("  %s %s;\t//  %s\n", dartField.DartType, dartField.Name, dartField.GoType)
 							}
 
 						default:
@@ -118,21 +119,28 @@ func inspectAST() {
 
 // DartField represents a Go Struct Field
 type DartField struct {
-	FieldName string // "Op"
-	CborName  string
-	FieldType string // "uint8"
-	DartType  string // "int"
+	Name     string // "Op"
+	CborName string
+	GoType   string // "uint8"
+	DartType string // "int"
 }
 
 // Convert AST field to Dart
 func convertField(astField *ast.Field) DartField {
 	dartField := DartField{}
 	if len(astField.Names) > 0 {
-		dartField.FieldName = astField.Names[0].Name // "Op"
+		dartField.Name = astField.Names[0].Name // "Op"
 	}
-	dartField.FieldType = fmt.Sprintf("%s", astField.Type)                   // "uint8"
-	dartField.DartType = convertType(fmt.Sprintf("%s", dartField.FieldType)) // "int"
-	// fmt.Printf("field: %s,\ttype: %s\n", dartField.FieldName, dartField.FieldType)
+	dartField.GoType = fmt.Sprintf("%s", astField.Type)                   // "uint8"
+	dartField.DartType = convertType(fmt.Sprintf("%s", dartField.GoType)) // "int"
+
+	// Convert a Field Tag like `codec:"len,omitempty"`. CborName will be set to "len".
+	if astField.Tag != nil {
+		dartField.CborName = strings.Replace(strings.Split(astField.Tag.Value, ",")[0], "codec:", "", 1)
+		dartField.CborName = strings.Replace(dartField.CborName, `"`, "", 2)
+		dartField.CborName = strings.Replace(dartField.CborName, "`", "", 2)
+	}
+	fmt.Printf("field: %s,\tcbor: %s,\ttype: %s\n", dartField.Name, dartField.CborName, dartField.GoType)
 	return dartField
 }
 
