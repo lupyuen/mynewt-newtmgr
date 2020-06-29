@@ -643,7 +643,7 @@ TxOptions NewTxOptions() {
 ////////////////////////////////////////
 //  Send Simple Mgmt Protocol Command to PineTime over Bluetooth LE
 
-void oldMain() {
+void main() {
   composeRequest();
 }
 
