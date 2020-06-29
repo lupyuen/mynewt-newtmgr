@@ -21,7 +21,9 @@
 
 # Updates for PineTime Companion App
 
-See [`newtmgr.dart`](newtmgr.dart) for newtmgr converted from Go to Dart.
+This `upload` branch contains the newtmgr firmware upload command converted to Dart.
+
+See [`dart`](dart) for newtmgr converted from Go to Dart.
 
 # Newtmgr
 
