@@ -48,17 +48,17 @@ class ImageUploadReq
   /// Encode the SMP Request fields to CBOR
   void Encode(cbor.MapBuilder builder) {
     builder.writeString("image");
-    builder.writeString(ImageNum);
+    builder.writeInt(ImageNum);
     builder.writeString("off");
-    builder.writeString(Off);
+    builder.writeInt(Off);
     builder.writeString("len");
-    builder.writeString(Len);
+    builder.writeInt(Len);
     builder.writeString("sha");
-    builder.writeString(DataSha);
+    builder.writeArray(DataSha);
     builder.writeString("upgrade");
-    builder.writeString(Upgrade);
+    builder.writeBool(Upgrade);
     builder.writeString("data");
-    builder.writeString(Data);
+    builder.writeArray(Data);
   }
 } */
 
