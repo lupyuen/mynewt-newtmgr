@@ -51,8 +51,8 @@ class NmpHdr {
   );
 } */
 
-// Inspect the Abstract Syntax Tree of our Go code
-func inspectAST() {
+// Inspect the Abstract Syntax Tree of our Go code and convert to Dart
+func convertGoToDart() {
 	fmt.Printf("//  Convert Go Code...%s\n", src)
 	fmt.Println("//  To Dart...")
 
@@ -80,17 +80,26 @@ func inspectAST() {
 					case *ast.TypeSpec:
 						typeName := spec.Name.Name // "NmpHdr"
 						// fmt.Printf("typeName: %s\n", typeName)
-						fmt.Printf("class %s {\n", typeName)
+						fmt.Printf("class %s ", typeName)
+						// Handle request messages
+						if strings.HasSuffix(typeName, "Req") {
+							fmt.Println("\n  with NmpBase       //  Get and set SMP Message Header\n  implements NmpReq  //  SMP Request Message")
+						}
+						fmt.Println("{")
+
 						switch structType := spec.Type.(type) {
 						case *ast.StructType: // "struct {"
 							// Process a struct declaration
 							// ast.Print(fileset, structType)
-							for _, field := range structType.Fields.List {
-								// Process a struct field and type
-								ast.Print(fileset, field)
-								dartField := convertField(field)
-								fmt.Printf("  %s %s;\t//  %s\n", dartField.DartType, dartField.Name, dartField.GoType)
+							convertFields(structType.Fields.List)
+							fmt.Println("")
+
+							// Handle request messages
+							if strings.HasSuffix(typeName, "Req") {
+								fmt.Println("  NmpMsg Msg() { return MsgFromReq(this); }\n")
 							}
+
+							// TODO: Generate CBOR encoder
 
 						default:
 							fmt.Println("*** Unknown Spec Type:")
@@ -117,7 +126,7 @@ func inspectAST() {
 	}
 }
 
-// DartField represents a Go Struct Field
+// DartField represents a Go Struct Field converted to Dart
 type DartField struct {
 	Name     string // "Op"
 	CborName string
@@ -125,7 +134,19 @@ type DartField struct {
 	DartType string // "int"
 }
 
-// Convert AST field to Dart
+// Convert Go Struct Fields to Dart
+func convertFields(astFields []*ast.Field) {
+	for _, field := range astFields {
+		// Process a struct field and type
+		// ast.Print(fileset, field)
+		dartField := convertField(field)
+		if dartField.Name != "" {
+			fmt.Printf("  %s %s;\t//  %s\n", dartField.DartType, dartField.Name, dartField.GoType)
+		}
+	}
+}
+
+// Convert Go Struct Field to Dart
 func convertField(astField *ast.Field) DartField {
 	dartField := DartField{}
 	if len(astField.Names) > 0 {
@@ -145,7 +166,7 @@ func convertField(astField *ast.Field) DartField {
 		dartField.CborName = strings.Replace(dartField.CborName, `"`, "", 2)
 		dartField.CborName = strings.Replace(dartField.CborName, "`", "", 2)
 	}
-	fmt.Printf("field: %s,\tcbor: %s,\ttype: %s,\tdart: %s\n", dartField.Name, dartField.CborName, dartField.GoType, dartField.DartType)
+	// fmt.Printf("field: %s,\tcbor: %s,\ttype: %s,\tdart: %s\n", dartField.Name, dartField.CborName, dartField.GoType, dartField.DartType)
 	return dartField
 }
 
@@ -157,6 +178,8 @@ func convertType(typeName string) string {
 	case "uint8":
 		return "int"
 	case "uint16":
+		return "int"
+	case "uint32":
 		return "int"
 	case "[]byte":
 		return "typed.Uint8Buffer"
@@ -432,7 +455,7 @@ func ExampleCommentMap() {
 }
 
 func main() {
-	inspectAST()
+	convertGoToDart()
 	// ExamplePrint()
 	// ExampleInspect()
 	// ExampleCommentMap()
