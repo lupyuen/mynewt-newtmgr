@@ -6,6 +6,16 @@
 				"line": 92,
 				"column": 15,
 				"label": ""
+			},
+			{
+				"line": 178,
+				"column": 13,
+				"label": ""
+			},
+			{
+				"line": 193,
+				"column": 17,
+				"label": ""
 			}
 		]
 	},
@@ -28,6 +38,46 @@
 		"path": "$ROOTPATH$/nmxact/xact/image.go",
 		"bookmarks": [
 			{
+				"line": 42,
+				"column": 14,
+				"label": ""
+			},
+			{
+				"line": 73,
+				"column": 16,
+				"label": ""
+			},
+			{
+				"line": 97,
+				"column": 16,
+				"label": ""
+			},
+			{
+				"line": 136,
+				"column": 15,
+				"label": ""
+			},
+			{
+				"line": 189,
+				"column": 17,
+				"label": ""
+			},
+			{
+				"line": 223,
+				"column": 12,
+				"label": ""
+			},
+			{
+				"line": 237,
+				"column": 15,
+				"label": ""
+			},
+			{
+				"line": 253,
+				"column": 14,
+				"label": ""
+			},
+			{
 				"line": 373,
 				"column": 14,
 				"label": ""
@@ -48,8 +98,43 @@
 		"path": "$ROOTPATH$/nmxact/nmp/image.go",
 		"bookmarks": [
 			{
-				"line": 123,
-				"column": 37,
+				"line": 49,
+				"column": 7,
+				"label": ""
+			},
+			{
+				"line": 95,
+				"column": 10,
+				"label": ""
+			},
+			{
+				"line": 131,
+				"column": 6,
+				"label": ""
+			},
+			{
+				"line": 140,
+				"column": 5,
+				"label": ""
+			},
+			{
+				"line": 168,
+				"column": 7,
+				"label": ""
+			},
+			{
+				"line": 200,
+				"column": 6,
+				"label": ""
+			},
+			{
+				"line": 228,
+				"column": 7,
+				"label": ""
+			},
+			{
+				"line": 256,
+				"column": 5,
 				"label": ""
 			}
 		]
@@ -63,13 +148,8 @@
 				"label": ""
 			},
 			{
-				"line": 156,
-				"column": 13,
-				"label": ""
-			},
-			{
-				"line": 170,
-				"column": 10,
+				"line": 161,
+				"column": 14,
 				"label": ""
 			}
 		]
@@ -325,6 +405,16 @@
 			{
 				"line": 40,
 				"column": 9,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/nmxact/nmp/defs.go",
+		"bookmarks": [
+			{
+				"line": 64,
+				"column": 12,
 				"label": ""
 			}
 		]
