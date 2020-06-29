@@ -14,17 +14,21 @@ import (
 )
 
 // src is the input for which we want to generate the Abstract Syntax Tree. "package" is mandatory.
+// bt means backtick "`"
 const src = `
 package main
-type NmpHdr struct {
-	Op    uint8 /* 3 bits of opcode */
-	Flags uint8
-	Len   uint16
-	Group uint16
-	Seq   uint8
-	Id    uint8
+type ImageUploadReq struct {
+	NmpBase  ` + bt + `codec:"-"` + bt + `
+	ImageNum uint8  ` + bt + `codec:"image"` + bt + `
+	Off      uint32 ` + bt + `codec:"off"` + bt + `
+	Len      uint32 ` + bt + `codec:"len,omitempty"` + bt + `
+	DataSha  []byte ` + bt + `codec:"sha,omitempty"` + bt + `
+	Upgrade  bool   ` + bt + `codec:"upgrade,omitempty"` + bt + `
+	Data     []byte ` + bt + `codec:"data"` + bt + `
 }
 `
+
+const bt = "`" //  Backtick character
 
 /* Objective: Convert the above Go code to Dart:
 class NmpHdr {
@@ -82,12 +86,9 @@ func inspectAST() {
 							// ast.Print(fileset, structType)
 							for _, field := range structType.Fields.List {
 								// Process a struct field and type
-								// ast.Print(fileset, field)
-								fieldName := field.Names[0].Name                      // "Op"
-								fieldType := field.Type                               // "uint8"
-								dartType := convertType(fmt.Sprintf("%s", fieldType)) // "int"
-								// fmt.Printf("field: %s,\ttype: %s\n", fieldName, fieldType)
-								fmt.Printf("  %s %s;\t//  %s\n", dartType, fieldName, fieldType)
+								ast.Print(fileset, field)
+								dartField := convertField(field)
+								fmt.Printf("  %s %s;\t//  %s\n", dartField.DartType, dartField.FieldName, dartField.FieldType)
 							}
 
 						default:
@@ -113,6 +114,26 @@ func inspectAST() {
 		}
 		// fmt.Printf("%s:\t%s\n", fset.Position(n.Pos()), s)
 	}
+}
+
+// DartField represents a Go Struct Field
+type DartField struct {
+	FieldName string // "Op"
+	CborName  string
+	FieldType string // "uint8"
+	DartType  string // "int"
+}
+
+// Convert AST field to Dart
+func convertField(astField *ast.Field) DartField {
+	dartField := DartField{}
+	if len(astField.Names) > 0 {
+		dartField.FieldName = astField.Names[0].Name // "Op"
+	}
+	dartField.FieldType = fmt.Sprintf("%s", astField.Type)                   // "uint8"
+	dartField.DartType = convertType(fmt.Sprintf("%s", dartField.FieldType)) // "int"
+	// fmt.Printf("field: %s,\ttype: %s\n", dartField.FieldName, dartField.FieldType)
+	return dartField
 }
 
 // Convert Go type to Dart type
