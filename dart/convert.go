@@ -32,23 +32,34 @@ type ImageUploadReq struct {
 const bt = "`" //  Backtick character
 
 /* Objective: Convert the above Go code to Dart:
-class NmpHdr {
-  int Op;    //  uint8: 3 bits of opcode
-  int Flags; //  uint8
-  int Len;   //  uint16
-  int Group; //  uint16
-  int Seq;   //  uint8
-  int Id;    //  uint8
+class ImageUploadReq
+  with NmpBase       //  Get and set SMP Message Header
+  implements NmpReq  //  SMP Request Message
+{
+  int ImageNum; //  uint8
+  int Off;      //  uint32
+  int Len;      //  uint32
+  typed.Uint8Buffer DataSha;    //  []byte
+  bool Upgrade; //  bool
+  typed.Uint8Buffer Data;       //  []byte
 
-  /// Construct an SMP Header
-  NmpHdr(
-    this.Op,    //  uint8: 3 bits of opcode
-    this.Flags, //  uint8
-    this.Len,   //  uint16
-    this.Group, //  uint16
-    this.Seq,   //  uint8
-    this.Id     //  uint8
-  );
+  NmpMsg Msg() { return MsgFromReq(this); }
+
+  /// Encode the SMP Request fields to CBOR
+  void Encode(cbor.MapBuilder builder) {
+    builder.writeString("image");
+    builder.writeString(ImageNum);
+    builder.writeString("off");
+    builder.writeString(Off);
+    builder.writeString("len");
+    builder.writeString(Len);
+    builder.writeString("sha");
+    builder.writeString(DataSha);
+    builder.writeString("upgrade");
+    builder.writeString(Upgrade);
+    builder.writeString("data");
+    builder.writeString(Data);
+  }
 } */
 
 // Inspect the Abstract Syntax Tree of our Go code and convert to Dart
@@ -91,7 +102,8 @@ func convertGoToDart() {
 						case *ast.StructType: // "struct {"
 							// Process a struct declaration
 							// ast.Print(fileset, structType)
-							convertFields(structType.Fields.List)
+							fields := structType.Fields.List
+							convertFields(fields)
 							fmt.Println("")
 
 							// Handle request messages
@@ -99,7 +111,8 @@ func convertGoToDart() {
 								fmt.Println("  NmpMsg Msg() { return MsgFromReq(this); }\n")
 							}
 
-							// TODO: Generate CBOR encoder
+							// Generate CBOR encoder
+							generateCborEncoder(fields)
 
 						default:
 							fmt.Println("*** Unknown Spec Type:")
@@ -132,6 +145,23 @@ type DartField struct {
 	CborName string
 	GoType   string // "uint8"
 	DartType string // "int"
+}
+
+// Generate the CBOR Encoder function
+func generateCborEncoder(astFields []*ast.Field) {
+	fmt.Println("  /// Encode the SMP Request fields to CBOR")
+	fmt.Println("  void Encode(cbor.MapBuilder builder) {")
+	for _, field := range astFields {
+		// Process a struct field and type
+		// ast.Print(fileset, field)
+		dartField := convertField(field)
+		if dartField.CborName != "-" {
+			fmt.Printf("    builder.writeString(\"%s\");\n", dartField.CborName)
+			// TODO: Handle type
+			fmt.Printf("    builder.writeString(%s);\n", dartField.Name)
+		}
+	}
+	fmt.Println("  }")
 }
 
 // Convert Go Struct Fields to Dart
