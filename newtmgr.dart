@@ -346,7 +346,7 @@ class ImageStateReadReq
   with NmpBase       //  Get and set SMP Message Header
   implements NmpReq  //  SMP Request Message  
 {
-  //  NmpBase base;  //  Will not be encoded: `codec:"-"`
+  NmpBase base;  //  Will not be encoded: `codec:"-"`
 
   NmpMsg Msg() { return MsgFromReq(this); }
 
@@ -643,10 +643,8 @@ TxOptions NewTxOptions() {
 ////////////////////////////////////////
 //  Send Simple Mgmt Protocol Command to PineTime over Bluetooth LE
 
-void main() {
+void oldMain() {
   composeRequest();
-  //  testCborEncoding();
-  //  testCborDecoding();
 }
 
 /// Compose a request to query firmware images on PineTime
