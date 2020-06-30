@@ -24,6 +24,13 @@ func NewImageUploadReq() *ImageUploadReq {
 }
 `
 
+/* Objective: Convert the above Go code to Dart:
+ImageUploadReq NewImageUploadReq {
+  var r = ImageUploadReq();
+  fillNmpReq(r, NMP_OP_WRITE, NMP_GROUP_IMAGE, NMP_ID_IMAGE_UPLOAD);
+  return r;
+} */
+
 const src2 = `
 package main
 type ImageUploadReq struct {
@@ -107,18 +114,33 @@ func convertFunction(fileset *token.FileSet, decl *ast.FuncDecl) {
 	// ast.Print(fileset, decl)
 	name := decl.Name                                               // "NewImageUploadReq"
 	returnType := fmt.Sprintf("%v", decl.Type.Results.List[0].Type) // "&{40 ImageUploadReq}"
-	// Convert "&{40 ImageUploadReq}" to "ImageUploadReq"
+	// Convert the return type "&{40 ImageUploadReq}" to "ImageUploadReq"
 	if strings.HasPrefix(returnType, "&{") && strings.HasSuffix(returnType, "}") {
 		returnType = strings.Split(returnType, " ")[1]
 		returnType = strings.Replace(returnType, "}", "", 1)
 	}
+	fmt.Printf("%s %s() {\n", returnType, name)
+	// Convert the body
 	body := decl.Body.List
 	for _, stmt := range body {
-		ast.Print(fileset, stmt)
-		dartStmt := fmt.Sprintf("%s", stmt)
-		fmt.Printf("%s\n", dartStmt)
+		// ast.Print(fileset, stmt)
+		// Convert the statement to a string
+		var buf bytes.Buffer
+		if err := format.Node(&buf, fileset, stmt); err != nil {
+			panic(err)
+		}
+		dartStmt := fmt.Sprintf("%s", buf.Bytes())
+		// Convert specific kinds of statements
+		switch stmt.(type) {
+		case *ast.AssignStmt:
+			// For Go assignment "r := &ImageUploadReq{}", rewrite to "var r = ImageUploadReq()"
+			dartStmt = strings.Replace(dartStmt, ":=", "=", 1)
+			dartStmt = strings.Replace(dartStmt, "&", "", 1)
+			dartStmt = strings.Replace(dartStmt, "{}", "()", 1)
+			dartStmt = "var " + dartStmt
+		}
+		fmt.Printf("  %s;\n", dartStmt)
 	}
-	fmt.Printf("%s %s {\n", returnType, name)
 	fmt.Println("}\n")
 }
 
@@ -236,6 +258,7 @@ func convertFunction(fileset *token.FileSet, decl *ast.FuncDecl) {
 
 // Convert Go Struct to Dart
 func convertStruct(fileset *token.FileSet, decl *ast.GenDecl) {
+	// ast.Print(fileset, decl)
 	// fmt.Printf("Tok: %s\n", decl.Tok) // "type"
 	switch decl.Tok.String() {
 	case "type":
@@ -288,6 +311,188 @@ func convertStruct(fileset *token.FileSet, decl *ast.GenDecl) {
 		ast.Print(fileset, decl.Tok)
 	}
 }
+
+/*
+     0  *ast.GenDecl {
+     1  .  TokPos: src.go:3:1
+     2  .  Tok: type
+     3  .  Lparen: -
+     4  .  Specs: []ast.Spec (len = 1) {
+     5  .  .  0: *ast.TypeSpec {
+     6  .  .  .  Name: *ast.Ident {
+     7  .  .  .  .  NamePos: src.go:3:6
+     8  .  .  .  .  Name: "ImageUploadReq"
+     9  .  .  .  .  Obj: *ast.Object {
+    10  .  .  .  .  .  Kind: type
+    11  .  .  .  .  .  Name: "ImageUploadReq"
+    12  .  .  .  .  .  Decl: *(obj @ 5)
+    13  .  .  .  .  }
+    14  .  .  .  }
+    15  .  .  .  Assign: -
+    16  .  .  .  Type: *ast.StructType {
+    17  .  .  .  .  Struct: src.go:3:21
+    18  .  .  .  .  Fields: *ast.FieldList {
+    19  .  .  .  .  .  Opening: src.go:3:28
+    20  .  .  .  .  .  List: []*ast.Field (len = 7) {
+    21  .  .  .  .  .  .  0: *ast.Field {
+    22  .  .  .  .  .  .  .  Type: *ast.Ident {
+    23  .  .  .  .  .  .  .  .  NamePos: src.go:4:2
+    24  .  .  .  .  .  .  .  .  Name: "NmpBase"
+    25  .  .  .  .  .  .  .  }
+    26  .  .  .  .  .  .  .  Tag: *ast.BasicLit {
+    27  .  .  .  .  .  .  .  .  ValuePos: src.go:4:11
+    28  .  .  .  .  .  .  .  .  Kind: STRING
+    29  .  .  .  .  .  .  .  .  Value: "`codec:\"-\"`"
+    30  .  .  .  .  .  .  .  }
+    31  .  .  .  .  .  .  }
+    32  .  .  .  .  .  .  1: *ast.Field {
+    33  .  .  .  .  .  .  .  Names: []*ast.Ident (len = 1) {
+    34  .  .  .  .  .  .  .  .  0: *ast.Ident {
+    35  .  .  .  .  .  .  .  .  .  NamePos: src.go:5:2
+    36  .  .  .  .  .  .  .  .  .  Name: "ImageNum"
+    37  .  .  .  .  .  .  .  .  .  Obj: *ast.Object {
+    38  .  .  .  .  .  .  .  .  .  .  Kind: var
+    39  .  .  .  .  .  .  .  .  .  .  Name: "ImageNum"
+    40  .  .  .  .  .  .  .  .  .  .  Decl: *(obj @ 32)
+    41  .  .  .  .  .  .  .  .  .  }
+    42  .  .  .  .  .  .  .  .  }
+    43  .  .  .  .  .  .  .  }
+    44  .  .  .  .  .  .  .  Type: *ast.Ident {
+    45  .  .  .  .  .  .  .  .  NamePos: src.go:5:11
+    46  .  .  .  .  .  .  .  .  Name: "uint8"
+    47  .  .  .  .  .  .  .  }
+    48  .  .  .  .  .  .  .  Tag: *ast.BasicLit {
+    49  .  .  .  .  .  .  .  .  ValuePos: src.go:5:18
+    50  .  .  .  .  .  .  .  .  Kind: STRING
+    51  .  .  .  .  .  .  .  .  Value: "`codec:\"image\"`"
+    52  .  .  .  .  .  .  .  }
+    53  .  .  .  .  .  .  }
+    54  .  .  .  .  .  .  2: *ast.Field {
+    55  .  .  .  .  .  .  .  Names: []*ast.Ident (len = 1) {
+    56  .  .  .  .  .  .  .  .  0: *ast.Ident {
+    57  .  .  .  .  .  .  .  .  .  NamePos: src.go:6:2
+    58  .  .  .  .  .  .  .  .  .  Name: "Off"
+    59  .  .  .  .  .  .  .  .  .  Obj: *ast.Object {
+    60  .  .  .  .  .  .  .  .  .  .  Kind: var
+    61  .  .  .  .  .  .  .  .  .  .  Name: "Off"
+    62  .  .  .  .  .  .  .  .  .  .  Decl: *(obj @ 54)
+    63  .  .  .  .  .  .  .  .  .  }
+    64  .  .  .  .  .  .  .  .  }
+    65  .  .  .  .  .  .  .  }
+    66  .  .  .  .  .  .  .  Type: *ast.Ident {
+    67  .  .  .  .  .  .  .  .  NamePos: src.go:6:11
+    68  .  .  .  .  .  .  .  .  Name: "uint32"
+    69  .  .  .  .  .  .  .  }
+    70  .  .  .  .  .  .  .  Tag: *ast.BasicLit {
+    71  .  .  .  .  .  .  .  .  ValuePos: src.go:6:18
+    72  .  .  .  .  .  .  .  .  Kind: STRING
+    73  .  .  .  .  .  .  .  .  Value: "`codec:\"off\"`"
+    74  .  .  .  .  .  .  .  }
+    75  .  .  .  .  .  .  }
+    76  .  .  .  .  .  .  3: *ast.Field {
+    77  .  .  .  .  .  .  .  Names: []*ast.Ident (len = 1) {
+    78  .  .  .  .  .  .  .  .  0: *ast.Ident {
+    79  .  .  .  .  .  .  .  .  .  NamePos: src.go:7:2
+    80  .  .  .  .  .  .  .  .  .  Name: "Len"
+    81  .  .  .  .  .  .  .  .  .  Obj: *ast.Object {
+    82  .  .  .  .  .  .  .  .  .  .  Kind: var
+    83  .  .  .  .  .  .  .  .  .  .  Name: "Len"
+    84  .  .  .  .  .  .  .  .  .  .  Decl: *(obj @ 76)
+    85  .  .  .  .  .  .  .  .  .  }
+    86  .  .  .  .  .  .  .  .  }
+    87  .  .  .  .  .  .  .  }
+    88  .  .  .  .  .  .  .  Type: *ast.Ident {
+    89  .  .  .  .  .  .  .  .  NamePos: src.go:7:11
+    90  .  .  .  .  .  .  .  .  Name: "uint32"
+    91  .  .  .  .  .  .  .  }
+    92  .  .  .  .  .  .  .  Tag: *ast.BasicLit {
+    93  .  .  .  .  .  .  .  .  ValuePos: src.go:7:18
+    94  .  .  .  .  .  .  .  .  Kind: STRING
+    95  .  .  .  .  .  .  .  .  Value: "`codec:\"len,omitempty\"`"
+    96  .  .  .  .  .  .  .  }
+    97  .  .  .  .  .  .  }
+    98  .  .  .  .  .  .  4: *ast.Field {
+    99  .  .  .  .  .  .  .  Names: []*ast.Ident (len = 1) {
+   100  .  .  .  .  .  .  .  .  0: *ast.Ident {
+   101  .  .  .  .  .  .  .  .  .  NamePos: src.go:8:2
+   102  .  .  .  .  .  .  .  .  .  Name: "DataSha"
+   103  .  .  .  .  .  .  .  .  .  Obj: *ast.Object {
+   104  .  .  .  .  .  .  .  .  .  .  Kind: var
+   105  .  .  .  .  .  .  .  .  .  .  Name: "DataSha"
+   106  .  .  .  .  .  .  .  .  .  .  Decl: *(obj @ 98)
+   107  .  .  .  .  .  .  .  .  .  }
+   108  .  .  .  .  .  .  .  .  }
+   109  .  .  .  .  .  .  .  }
+   110  .  .  .  .  .  .  .  Type: *ast.ArrayType {
+   111  .  .  .  .  .  .  .  .  Lbrack: src.go:8:11
+   112  .  .  .  .  .  .  .  .  Elt: *ast.Ident {
+   113  .  .  .  .  .  .  .  .  .  NamePos: src.go:8:13
+   114  .  .  .  .  .  .  .  .  .  Name: "byte"
+   115  .  .  .  .  .  .  .  .  }
+   116  .  .  .  .  .  .  .  }
+   117  .  .  .  .  .  .  .  Tag: *ast.BasicLit {
+   118  .  .  .  .  .  .  .  .  ValuePos: src.go:8:18
+   119  .  .  .  .  .  .  .  .  Kind: STRING
+   120  .  .  .  .  .  .  .  .  Value: "`codec:\"sha,omitempty\"`"
+   121  .  .  .  .  .  .  .  }
+   122  .  .  .  .  .  .  }
+   123  .  .  .  .  .  .  5: *ast.Field {
+   124  .  .  .  .  .  .  .  Names: []*ast.Ident (len = 1) {
+   125  .  .  .  .  .  .  .  .  0: *ast.Ident {
+   126  .  .  .  .  .  .  .  .  .  NamePos: src.go:9:2
+   127  .  .  .  .  .  .  .  .  .  Name: "Upgrade"
+   128  .  .  .  .  .  .  .  .  .  Obj: *ast.Object {
+   129  .  .  .  .  .  .  .  .  .  .  Kind: var
+   130  .  .  .  .  .  .  .  .  .  .  Name: "Upgrade"
+   131  .  .  .  .  .  .  .  .  .  .  Decl: *(obj @ 123)
+   132  .  .  .  .  .  .  .  .  .  }
+   133  .  .  .  .  .  .  .  .  }
+   134  .  .  .  .  .  .  .  }
+   135  .  .  .  .  .  .  .  Type: *ast.Ident {
+   136  .  .  .  .  .  .  .  .  NamePos: src.go:9:11
+   137  .  .  .  .  .  .  .  .  Name: "bool"
+   138  .  .  .  .  .  .  .  }
+   139  .  .  .  .  .  .  .  Tag: *ast.BasicLit {
+   140  .  .  .  .  .  .  .  .  ValuePos: src.go:9:18
+   141  .  .  .  .  .  .  .  .  Kind: STRING
+   142  .  .  .  .  .  .  .  .  Value: "`codec:\"upgrade,omitempty\"`"
+   143  .  .  .  .  .  .  .  }
+   144  .  .  .  .  .  .  }
+   145  .  .  .  .  .  .  6: *ast.Field {
+   146  .  .  .  .  .  .  .  Names: []*ast.Ident (len = 1) {
+   147  .  .  .  .  .  .  .  .  0: *ast.Ident {
+   148  .  .  .  .  .  .  .  .  .  NamePos: src.go:10:2
+   149  .  .  .  .  .  .  .  .  .  Name: "Data"
+   150  .  .  .  .  .  .  .  .  .  Obj: *ast.Object {
+   151  .  .  .  .  .  .  .  .  .  .  Kind: var
+   152  .  .  .  .  .  .  .  .  .  .  Name: "Data"
+   153  .  .  .  .  .  .  .  .  .  .  Decl: *(obj @ 145)
+   154  .  .  .  .  .  .  .  .  .  }
+   155  .  .  .  .  .  .  .  .  }
+   156  .  .  .  .  .  .  .  }
+   157  .  .  .  .  .  .  .  Type: *ast.ArrayType {
+   158  .  .  .  .  .  .  .  .  Lbrack: src.go:10:11
+   159  .  .  .  .  .  .  .  .  Elt: *ast.Ident {
+   160  .  .  .  .  .  .  .  .  .  NamePos: src.go:10:13
+   161  .  .  .  .  .  .  .  .  .  Name: "byte"
+   162  .  .  .  .  .  .  .  .  }
+   163  .  .  .  .  .  .  .  }
+   164  .  .  .  .  .  .  .  Tag: *ast.BasicLit {
+   165  .  .  .  .  .  .  .  .  ValuePos: src.go:10:18
+   166  .  .  .  .  .  .  .  .  Kind: STRING
+   167  .  .  .  .  .  .  .  .  Value: "`codec:\"data\"`"
+   168  .  .  .  .  .  .  .  }
+   169  .  .  .  .  .  .  }
+   170  .  .  .  .  .  }
+   171  .  .  .  .  .  Closing: src.go:11:1
+   172  .  .  .  .  }
+   173  .  .  .  .  Incomplete: false
+   174  .  .  .  }
+   175  .  .  }
+   176  .  }
+   177  .  Rparen: -
+   178  }
+*/
 
 // DartField represents a Go Struct Field converted to Dart and CBOR
 type DartField struct {
