@@ -60,10 +60,10 @@ class ImageUploadReq
   }
 }
 
-func NewImageUploadReq() *ImageUploadReq {
-	r := &ImageUploadReq{}
-	fillNmpReq(r, NMP_OP_WRITE, NMP_GROUP_IMAGE, NMP_ID_IMAGE_UPLOAD)
-	return r
+ImageUploadReq NewImageUploadReq() {
+  var r = ImageUploadReq();
+  fillNmpReq(r, NMP_OP_WRITE, NMP_GROUP_IMAGE, NMP_ID_IMAGE_UPLOAD);
+  return r;
 }
 
 //////////////////////////////////////////////////////////////////////////////
