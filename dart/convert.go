@@ -15,7 +15,7 @@ import (
 )
 
 // src is the Go code to be converted to Dart. "package" is mandatory. "bt" means backtick "`"
-const src2 = `
+const src = `
 package main
 func NewImageUploadReq() *ImageUploadReq {
 	r := &ImageUploadReq{}
@@ -24,7 +24,7 @@ func NewImageUploadReq() *ImageUploadReq {
 }
 `
 
-const src = `
+const src2 = `
 package main
 type ImageUploadReq struct {
 	NmpBase  ` + bt + `codec:"-"` + bt + `
@@ -104,8 +104,135 @@ func convertGoToDart() {
 
 // Convert Go Function to Dart
 func convertFunction(fileset *token.FileSet, decl *ast.FuncDecl) {
-	ast.Print(fileset, decl)
+	// ast.Print(fileset, decl)
+	name := decl.Name                                               // "NewImageUploadReq"
+	returnType := fmt.Sprintf("%v", decl.Type.Results.List[0].Type) // "&{40 ImageUploadReq}"
+	// Convert "&{40 ImageUploadReq}" to "ImageUploadReq"
+	if strings.HasPrefix(returnType, "&{") && strings.HasSuffix(returnType, "}") {
+		returnType = strings.Split(returnType, " ")[1]
+		returnType = strings.Replace(returnType, "}", "", 1)
+	}
+	body := decl.Body.List
+	for _, stmt := range body {
+		ast.Print(fileset, stmt)
+		dartStmt := fmt.Sprintf("%s", stmt)
+		fmt.Printf("%s\n", dartStmt)
+	}
+	fmt.Printf("%s %s {\n", returnType, name)
+	fmt.Println("}\n")
 }
+
+/*
+     0  *ast.FuncDecl {
+     1  .  Name: *ast.Ident {
+     2  .  .  NamePos: src.go:3:6
+     3  .  .  Name: "NewImageUploadReq"
+     4  .  .  Obj: *ast.Object {
+     5  .  .  .  Kind: func
+     6  .  .  .  Name: "NewImageUploadReq"
+     7  .  .  .  Decl: *(obj @ 0)
+     8  .  .  }
+     9  .  }
+    10  .  Type: *ast.FuncType {
+    11  .  .  Func: src.go:3:1
+    12  .  .  Params: *ast.FieldList {
+    13  .  .  .  Opening: src.go:3:23
+    14  .  .  .  Closing: src.go:3:24
+    15  .  .  }
+    16  .  .  Results: *ast.FieldList {
+    17  .  .  .  Opening: -
+    18  .  .  .  List: []*ast.Field (len = 1) {
+    19  .  .  .  .  0: *ast.Field {
+    20  .  .  .  .  .  Type: *ast.StarExpr {
+    21  .  .  .  .  .  .  Star: src.go:3:26
+    22  .  .  .  .  .  .  X: *ast.Ident {
+    23  .  .  .  .  .  .  .  NamePos: src.go:3:27
+    24  .  .  .  .  .  .  .  Name: "ImageUploadReq"
+    25  .  .  .  .  .  .  }
+    26  .  .  .  .  .  }
+    27  .  .  .  .  }
+    28  .  .  .  }
+    29  .  .  .  Closing: -
+    30  .  .  }
+    31  .  }
+    32  .  Body: *ast.BlockStmt {
+    33  .  .  Lbrace: src.go:3:42
+    34  .  .  List: []ast.Stmt (len = 3) {
+    35  .  .  .  0: *ast.AssignStmt {
+    36  .  .  .  .  Lhs: []ast.Expr (len = 1) {
+    37  .  .  .  .  .  0: *ast.Ident {
+    38  .  .  .  .  .  .  NamePos: src.go:4:2
+    39  .  .  .  .  .  .  Name: "r"
+    40  .  .  .  .  .  .  Obj: *ast.Object {
+    41  .  .  .  .  .  .  .  Kind: var
+    42  .  .  .  .  .  .  .  Name: "r"
+    43  .  .  .  .  .  .  .  Decl: *(obj @ 35)
+    44  .  .  .  .  .  .  }
+    45  .  .  .  .  .  }
+    46  .  .  .  .  }
+    47  .  .  .  .  TokPos: src.go:4:4
+    48  .  .  .  .  Tok: :=
+    49  .  .  .  .  Rhs: []ast.Expr (len = 1) {
+    50  .  .  .  .  .  0: *ast.UnaryExpr {
+    51  .  .  .  .  .  .  OpPos: src.go:4:7
+    52  .  .  .  .  .  .  Op: &
+    53  .  .  .  .  .  .  X: *ast.CompositeLit {
+    54  .  .  .  .  .  .  .  Type: *ast.Ident {
+    55  .  .  .  .  .  .  .  .  NamePos: src.go:4:8
+    56  .  .  .  .  .  .  .  .  Name: "ImageUploadReq"
+    57  .  .  .  .  .  .  .  }
+    58  .  .  .  .  .  .  .  Lbrace: src.go:4:22
+    59  .  .  .  .  .  .  .  Rbrace: src.go:4:23
+    60  .  .  .  .  .  .  .  Incomplete: false
+    61  .  .  .  .  .  .  }
+    62  .  .  .  .  .  }
+    63  .  .  .  .  }
+    64  .  .  .  }
+    65  .  .  .  1: *ast.ExprStmt {
+    66  .  .  .  .  X: *ast.CallExpr {
+    67  .  .  .  .  .  Fun: *ast.Ident {
+    68  .  .  .  .  .  .  NamePos: src.go:5:2
+    69  .  .  .  .  .  .  Name: "fillNmpReq"
+    70  .  .  .  .  .  }
+    71  .  .  .  .  .  Lparen: src.go:5:12
+    72  .  .  .  .  .  Args: []ast.Expr (len = 4) {
+    73  .  .  .  .  .  .  0: *ast.Ident {
+    74  .  .  .  .  .  .  .  NamePos: src.go:5:13
+    75  .  .  .  .  .  .  .  Name: "r"
+    76  .  .  .  .  .  .  .  Obj: *(obj @ 40)
+    77  .  .  .  .  .  .  }
+    78  .  .  .  .  .  .  1: *ast.Ident {
+    79  .  .  .  .  .  .  .  NamePos: src.go:5:16
+    80  .  .  .  .  .  .  .  Name: "NMP_OP_WRITE"
+    81  .  .  .  .  .  .  }
+    82  .  .  .  .  .  .  2: *ast.Ident {
+    83  .  .  .  .  .  .  .  NamePos: src.go:5:30
+    84  .  .  .  .  .  .  .  Name: "NMP_GROUP_IMAGE"
+    85  .  .  .  .  .  .  }
+    86  .  .  .  .  .  .  3: *ast.Ident {
+    87  .  .  .  .  .  .  .  NamePos: src.go:5:47
+    88  .  .  .  .  .  .  .  Name: "NMP_ID_IMAGE_UPLOAD"
+    89  .  .  .  .  .  .  }
+    90  .  .  .  .  .  }
+    91  .  .  .  .  .  Ellipsis: -
+    92  .  .  .  .  .  Rparen: src.go:5:66
+    93  .  .  .  .  }
+    94  .  .  .  }
+    95  .  .  .  2: *ast.ReturnStmt {
+    96  .  .  .  .  Return: src.go:6:2
+    97  .  .  .  .  Results: []ast.Expr (len = 1) {
+    98  .  .  .  .  .  0: *ast.Ident {
+    99  .  .  .  .  .  .  NamePos: src.go:6:9
+   100  .  .  .  .  .  .  Name: "r"
+   101  .  .  .  .  .  .  Obj: *(obj @ 40)
+   102  .  .  .  .  .  }
+   103  .  .  .  .  }
+   104  .  .  .  }
+   105  .  .  }
+   106  .  .  Rbrace: src.go:7:1
+   107  .  }
+   108  }
+*/
 
 // Convert Go Struct to Dart
 func convertStruct(fileset *token.FileSet, decl *ast.GenDecl) {
