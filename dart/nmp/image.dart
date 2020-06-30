@@ -17,6 +17,7 @@
  * under the License.
  */
 import 'package:cbor/cbor.dart' as cbor;               //  CBOR Encoder and Decoder. From https://pub.dev/packages/cbor
+import 'package:typed_data/typed_data.dart' as typed;  //  Helpers for Byte Buffers. From https://pub.dev/packages/typed_data
 import 'defs.dart';
 import 'nmp.dart';
 
@@ -28,6 +29,42 @@ import 'nmp.dart';
 //////////////////////////////////////////////////////////////////////////////
 // $upload                                                                  //
 //////////////////////////////////////////////////////////////////////////////
+
+class ImageUploadReq 
+  with NmpBase       //  Get and set SMP Message Header
+  implements NmpReq  //  SMP Request Message
+{
+  int ImageNum; //  uint8
+  int Off;      //  uint32
+  int Len;      //  uint32
+  typed.Uint8Buffer DataSha;    //  []byte
+  bool Upgrade; //  bool
+  typed.Uint8Buffer Data;       //  []byte
+
+  NmpMsg Msg() { return MsgFromReq(this); }
+
+  /// Encode the SMP Request fields to CBOR
+  void Encode(cbor.MapBuilder builder) {
+    builder.writeString("image");
+    builder.writeInt(ImageNum);
+    builder.writeString("off");
+    builder.writeInt(Off);
+    builder.writeString("len");
+    builder.writeInt(Len);
+    builder.writeString("sha");
+    builder.writeArray(DataSha);
+    builder.writeString("upgrade");
+    builder.writeBool(Upgrade);
+    builder.writeString("data");
+    builder.writeArray(Data);
+  }
+}
+
+func NewImageUploadReq() *ImageUploadReq {
+	r := &ImageUploadReq{}
+	fillNmpReq(r, NMP_OP_WRITE, NMP_GROUP_IMAGE, NMP_ID_IMAGE_UPLOAD)
+	return r
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // $state                                                                   //

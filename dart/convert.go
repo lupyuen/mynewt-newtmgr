@@ -14,8 +14,16 @@ import (
 	"strings"
 )
 
-// src is the input for which we want to generate the Abstract Syntax Tree. "package" is mandatory.
-// bt means backtick "`"
+// src is the Go code to be converted to Dart. "package" is mandatory. "bt" means backtick "`"
+const src2 = `
+package main
+func NewImageUploadReq() *ImageUploadReq {
+	r := &ImageUploadReq{}
+	fillNmpReq(r, NMP_OP_WRITE, NMP_GROUP_IMAGE, NMP_ID_IMAGE_UPLOAD)
+	return r
+}
+`
+
 const src = `
 package main
 type ImageUploadReq struct {
@@ -28,8 +36,6 @@ type ImageUploadReq struct {
 	Data     []byte ` + bt + `codec:"data"` + bt + `
 }
 `
-
-const bt = "`" //  Backtick character
 
 /* Objective: Convert the above Go code to Dart:
 class ImageUploadReq
@@ -62,6 +68,8 @@ class ImageUploadReq
   }
 } */
 
+const bt = "`" //  Backtick character
+
 // Inspect the Abstract Syntax Tree of our Go code and convert to Dart
 func convertGoToDart() {
 	fmt.Printf("//  Go Code...%s\n", src)
@@ -81,63 +89,76 @@ func convertGoToDart() {
 		// ast.Print(fileset, decl)
 		switch decl := decl.(type) {
 		case *ast.GenDecl:
-			// fmt.Printf("Tok: %s\n", decl.Tok) // "type"
-			switch decl.Tok.String() {
-			case "type":
-				// Process a type declaration
-				for _, spec := range decl.Specs {
-					// ast.Print(fileset, spec)
-					switch spec := spec.(type) {
-					case *ast.TypeSpec:
-						typeName := spec.Name.Name // "NmpHdr"
-						// fmt.Printf("typeName: %s\n", typeName)
-						fmt.Printf("class %s ", typeName)
-						// Handle request messages
-						if strings.HasSuffix(typeName, "Req") {
-							fmt.Println("")
-							fmt.Println("  with NmpBase       //  Get and set SMP Message Header")
-							fmt.Println("  implements NmpReq  //  SMP Request Message")
-						}
-						fmt.Println("{")
-
-						switch structType := spec.Type.(type) {
-						case *ast.StructType: // "struct {"
-							// Process a struct declaration
-							// ast.Print(fileset, structType)
-							fields := structType.Fields.List
-							convertFields(fields)
-							fmt.Println("")
-
-							// Handle request messages
-							if strings.HasSuffix(typeName, "Req") {
-								fmt.Println("  NmpMsg Msg() { return MsgFromReq(this); }\n")
-							}
-
-							// Generate CBOR encoder
-							generateCborEncoder(fields)
-
-						default:
-							fmt.Println("*** Unknown Spec Type:")
-							ast.Print(fileset, spec.Type)
-						}
-
-					default:
-						fmt.Println("*** Unknown Spec:")
-						ast.Print(fileset, spec)
-					}
-				}
-				fmt.Println("}")
-
-			default:
-				fmt.Println("*** Unknown Tok:")
-				ast.Print(fileset, decl.Tok)
-			}
-
+			// Convert Go Struct to Dart
+			convertStruct(fileset, decl)
+		case *ast.FuncDecl:
+			// Convert Go Function to Dart
+			convertFunction(fileset, decl)
 		default:
 			fmt.Println("*** Unknown Decl:")
 			ast.Print(fileset, decl)
 		}
 		// fmt.Printf("%s:\t%s\n", fset.Position(n.Pos()), s)
+	}
+}
+
+// Convert Go Function to Dart
+func convertFunction(fileset *token.FileSet, decl *ast.FuncDecl) {
+	ast.Print(fileset, decl)
+}
+
+// Convert Go Struct to Dart
+func convertStruct(fileset *token.FileSet, decl *ast.GenDecl) {
+	// fmt.Printf("Tok: %s\n", decl.Tok) // "type"
+	switch decl.Tok.String() {
+	case "type":
+		// Process a type declaration
+		for _, spec := range decl.Specs {
+			// ast.Print(fileset, spec)
+			switch spec := spec.(type) {
+			case *ast.TypeSpec:
+				typeName := spec.Name.Name // "NmpHdr"
+				// fmt.Printf("typeName: %s\n", typeName)
+				fmt.Printf("class %s ", typeName)
+				// Handle request messages
+				if strings.HasSuffix(typeName, "Req") {
+					fmt.Println("")
+					fmt.Println("  with NmpBase       //  Get and set SMP Message Header")
+					fmt.Println("  implements NmpReq  //  SMP Request Message")
+				}
+				fmt.Println("{")
+
+				switch structType := spec.Type.(type) {
+				case *ast.StructType: // "struct {"
+					// Process a struct declaration
+					// ast.Print(fileset, structType)
+					fields := structType.Fields.List
+					convertFields(fileset, fields)
+					fmt.Println("")
+
+					// Handle request messages
+					if strings.HasSuffix(typeName, "Req") {
+						fmt.Println("  NmpMsg Msg() { return MsgFromReq(this); }\n")
+					}
+
+					// Generate CBOR encoder
+					generateCborEncoder(fileset, fields)
+
+				default:
+					fmt.Println("*** Unknown Spec Type:")
+					ast.Print(fileset, spec.Type)
+				}
+
+			default:
+				fmt.Println("*** Unknown Spec:")
+				ast.Print(fileset, spec)
+			}
+		}
+		fmt.Println("}")
+
+	default:
+		fmt.Println("*** Unknown Tok:")
+		ast.Print(fileset, decl.Tok)
 	}
 }
 
@@ -151,12 +172,12 @@ type DartField struct {
 }
 
 // Generate the CBOR Encoder function
-func generateCborEncoder(astFields []*ast.Field) {
+func generateCborEncoder(fileset *token.FileSet, astFields []*ast.Field) {
 	fmt.Println("  /// Encode the SMP Request fields to CBOR")
 	fmt.Println("  void Encode(cbor.MapBuilder builder) {")
 	for _, field := range astFields {
 		// ast.Print(fileset, field)
-		dartField := convertField(field)
+		dartField := convertField(fileset, field)
 		if dartField.CborName != "-" {
 			fmt.Printf("    builder.writeString(\"%s\");\n", dartField.CborName)
 			fmt.Printf("    builder.write%s(%s);\n", dartField.CborType, dartField.Name)
@@ -166,10 +187,10 @@ func generateCborEncoder(astFields []*ast.Field) {
 }
 
 // Convert Go Struct Fields to Dart
-func convertFields(astFields []*ast.Field) {
+func convertFields(fileset *token.FileSet, astFields []*ast.Field) {
 	for _, field := range astFields {
 		// ast.Print(fileset, field)
-		dartField := convertField(field)
+		dartField := convertField(fileset, field)
 		if dartField.Name != "" {
 			fmt.Printf("  %s %s;\t//  %s\n", dartField.DartType, dartField.Name, dartField.GoType)
 		}
@@ -177,7 +198,7 @@ func convertFields(astFields []*ast.Field) {
 }
 
 // Convert Go Struct Field to Dart
-func convertField(astField *ast.Field) DartField {
+func convertField(fileset *token.FileSet, astField *ast.Field) DartField {
 	dartField := DartField{}
 	if len(astField.Names) > 0 {
 		dartField.Name = astField.Names[0].Name // "Len"
@@ -187,7 +208,7 @@ func convertField(astField *ast.Field) DartField {
 	if strings.HasPrefix(dartField.GoType, "&{") && strings.HasSuffix(dartField.GoType, " byte}") {
 		dartField.GoType = "[]byte"
 	}
-	dartField.DartType, dartField.CborType = convertType(fmt.Sprintf("%s", dartField.GoType)) // "int"
+	dartField.DartType, dartField.CborType = convertType(dartField.GoType) // "int"
 
 	// Convert a Field Tag like `codec:"len,omitempty"`. CborName will be set to "len".
 	if astField.Tag != nil {

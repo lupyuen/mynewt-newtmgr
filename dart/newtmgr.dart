@@ -33,7 +33,8 @@ void main() {
 /// Compose a request to query firmware images on PineTime
 typed.Uint8Buffer composeRequest() {
   //  Create the SMP Request
-  final req = NewImageStateReadReq();
+  //  final req = NewImageStateReadReq();
+  final req = NewImageUploadReq();
 
   //  Encode the SMP Message with CBOR
   final msg = req.Msg();

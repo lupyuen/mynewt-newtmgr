@@ -6,7 +6,7 @@
         {
             "label": "Run Convert",
             "type": "shell",
-            "command": "cd dart && /usr/local/go/bin/go run convert.go",
+            "command": "/usr/local/go/bin/go run dart/convert.go",
             "group": {
                 "kind": "build",
                 "isDefault": true
